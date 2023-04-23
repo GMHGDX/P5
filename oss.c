@@ -101,7 +101,7 @@ int main(int argc, char *argv[]){
     for(i=0; i<10 i++) {
         for(j=0;j<20;j++) {
             printf("Enter value for resourceTable[%d][%d]:", i, j);
-            scanf("%d", &disp[i][j]);
+            scanf("%d", &resourceTable[i][j]);
         }
     }
 
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
     printf("Two Dimensional array elements:\n");
     for(i=0; i<10; i++) {
         for(j=0;j<20;j++) {
-            printf("%d ", disp[i][j]);
+            printf("%d ", resourceTable[i][j]);
             if(j==2){
                 printf("\n");
             }
