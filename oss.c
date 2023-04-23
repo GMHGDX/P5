@@ -42,56 +42,56 @@ int randomNumberGenerator(int limit)
 }
 
 int main(int argc, char *argv[]){
-	//number of total children to launch (n)
-	int proc = 1;
+	// //number of total children to launch (n)
+	// int proc = 1;
 
-	//how many children run at the same time (s)
-	int simul = 1;
+	// //how many children run at the same time (s)
+	// int simul = 1;
 
-	//bound of time that a child process will be launched for (t)
-	int timelimit= 2;
+	// //bound of time that a child process will be launched for (t)
+	// int timelimit= 2;
 
-    //logfile declaration
-    char* logFile = "logfile";
+    // //logfile declaration
+    // char* logFile = "logfile";
 
-    //variables for our system clock
-    struct timespec start, stop;
-    double sec;
-    double nano;
+    // //variables for our system clock
+    // struct timespec start, stop;
+    // double sec;
+    // double nano;
 
-    //for the file 
-    FILE *fileLogging;
+    // //for the file 
+    // FILE *fileLogging;
 
-    //child process ID
-    pid_t childpid = 0;
+    // //child process ID
+    // pid_t childpid = 0;
 
-    //Parse through command line options
-	char opt;
-    while((opt = getopt(argc, argv, "hf:")) != -1 )
-    {
-        switch (opt)
-        {
-        //help message
-        case 'h':
-			printf("To run this project: \n\n");
-            printf("run the command: ./oss -n num -s num -t num\n\n");
-                    printf("\t-f = name of logfile you wish to write the process table in oss.c to\n\n"); 
-                    printf("If you leave out '-f' in the command line prompt it will default to 'logfile'\n\n");
-                    printf("Have fun :)\n\n");
+    // //Parse through command line options
+	// char opt;
+    // while((opt = getopt(argc, argv, "hf:")) != -1 )
+    // {
+    //     switch (opt)
+    //     {
+    //     //help message
+    //     case 'h':
+	// 		printf("To run this project: \n\n");
+    //         printf("run the command: ./oss -n num -s num -t num\n\n");
+    //                 printf("\t-f = name of logfile you wish to write the process table in oss.c to\n\n"); 
+    //                 printf("If you leave out '-f' in the command line prompt it will default to 'logfile'\n\n");
+    //                 printf("Have fun :)\n\n");
 
-                    exit(0);
-            break;
-        case 'f':
-            logFile = optarg; 
-            break;
-        default:
-            printf ("Invalid option %c \n", optopt);
-            return (EXIT_FAILURE);
-        }
-    }
+    //                 exit(0);
+    //         break;
+    //     case 'f':
+    //         logFile = optarg; 
+    //         break;
+    //     default:
+    //         printf ("Invalid option %c \n", optopt);
+    //         return (EXIT_FAILURE);
+    //     }
+    // }
 
-    //Open the log file before input begins 
-    fileLogging = fopen(logFile, "w+");
+    // //Open the log file before input begins 
+    // fileLogging = fopen(logFile, "w+");
 
     //Resource Table Declared
     int resourceTable[10][20];
