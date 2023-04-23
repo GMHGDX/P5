@@ -1,1 +1,3 @@
 Hopefully this project gets completed
+
+Used message queues to communicate requests, allocation, and release of resources
