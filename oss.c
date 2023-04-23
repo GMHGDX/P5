@@ -98,7 +98,7 @@ int main(int argc, char *argv[]){
 
     /*Counter variables for the loop*/
     int i, j;
-    for(i=0; i<10 i++) {
+    for(i=0; i<10; i++) {
         for(j=0;j<20;j++) {
             printf("Enter value for resourceTable[%d][%d]:", i, j);
             scanf("%d", &resourceTable[i][j]);
@@ -117,6 +117,7 @@ int main(int argc, char *argv[]){
     }
 
 return 0;
+}
 //     //initialize the resource table
 //     int j;
 //     for(j=0;j<20;j++){
