@@ -164,6 +164,7 @@ int main(int argc, char *argv[]){
     double currentTime;
     double limitReach;
     struct sysTime writeToMem;
+    int numofchild = 0;
 
     //----------------------------------------------------------------------------------------------------------------------------------------
     //for forking the first child on the first loop
@@ -195,24 +196,25 @@ int main(int argc, char *argv[]){
         writeToMem = *shm_ptr;
     
         if(limitReach <= currentTime){
+            numofchild++;
             childpid = fork(); //fork child
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
 
             //combine seconds, milliseconds, and nanoseconds as one decimal to get new time to fork process
             limitReach = sec + milliSec/1000 + nano/BILLION;
-            printf("we are making a new process at: %ld", limitReach); 
+            printf("we are making a new process at: %ld\n", limitReach); 
 
             if (childpid == -1) {
                 perror("Failed to fork");
                 return 1;
             }
-            if (childpid == 0){  //send shared memory key to worker for children to use 
+            if (childpid == 0){  //send shared memory key to user_proc for children to use 
                 char sh_key_string[50];
                 snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
 
-                char *args[] = {"worker", sh_key_string, NULL};
-                //exec function to send children to worker along with our shared memory key
-                execvp("./worker", args);
+                char *args[] = {"user_proc", sh_key_string, NULL};
+                //exec function to send children to user_proc along with our shared memory key
+                execvp("./user_proc", args);
 
                 return 1;
             }
@@ -239,6 +241,9 @@ int main(int argc, char *argv[]){
                 // //send our string to message queue
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
+        }
+        if(numofchild>0){
+            break;
         }
     }  
 
