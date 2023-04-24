@@ -116,13 +116,6 @@ int main(int argc, char *argv[]){
     //Open the log file before input begins 
     fileLogging = fopen(logFile, "w+");
 
-    //initialize the resource table
-    int j;
-    for(j=0;j<20;j++){
-        resourceTable[j].resources = (double)0;
-        processTable[j].process = (double)0;
-    }
-
     //Create random millisecond between 1 - 500
     srand(time(0));
 
