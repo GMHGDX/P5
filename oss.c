@@ -42,82 +42,75 @@ int randomNumberGenerator(int limit)
 }
 
 int main(int argc, char *argv[]){
-	// //number of total children to launch (n)
-	// int proc = 1;
+    //logfile declaration
+    char* logFile = "logfile";
 
-	// //how many children run at the same time (s)
-	// int simul = 1;
+    //variables for our system clock
+    struct timespec start, stop;
+    double sec;
+    double nano;
 
-	// //bound of time that a child process will be launched for (t)
-	// int timelimit= 2;
+    //for the file 
+    FILE *fileLogging;
 
-    // //logfile declaration
-    // char* logFile = "logfile";
+    //child process ID
+    pid_t childpid = 0;
 
-    // //variables for our system clock
-    // struct timespec start, stop;
-    // double sec;
-    // double nano;
+    //Parse through command line options
+	char opt;
+    while((opt = getopt(argc, argv, "hf:")) != -1 )
+    {
+        switch (opt)
+        {
+        //help message
+        case 'h':
+			printf("To run this project: \n\n");
+            printf("run the command: ./oss -n num -s num -t num\n\n");
+                    printf("\t-f = name of logfile you wish to write the process table in oss.c to\n\n"); 
+                    printf("If you leave out '-f' in the command line prompt it will default to 'logfile'\n\n");
+                    printf("Have fun :)\n\n");
 
-    // //for the file 
-    // FILE *fileLogging;
-
-    // //child process ID
-    // pid_t childpid = 0;
-
-    // //Parse through command line options
-	// char opt;
-    // while((opt = getopt(argc, argv, "hf:")) != -1 )
-    // {
-    //     switch (opt)
-    //     {
-    //     //help message
-    //     case 'h':
-	// 		printf("To run this project: \n\n");
-    //         printf("run the command: ./oss -n num -s num -t num\n\n");
-    //                 printf("\t-f = name of logfile you wish to write the process table in oss.c to\n\n"); 
-    //                 printf("If you leave out '-f' in the command line prompt it will default to 'logfile'\n\n");
-    //                 printf("Have fun :)\n\n");
-
-    //                 exit(0);
-    //         break;
-    //     case 'f':
-    //         logFile = optarg; 
-    //         break;
-    //     default:
-    //         printf ("Invalid option %c \n", optopt);
-    //         return (EXIT_FAILURE);
-    //     }
-    // }
-
-    // //Open the log file before input begins 
-    // fileLogging = fopen(logFile, "w+");
-
-    //Resource Table Declared
-    int resourceTable[10][20];
-
-    /*Counter variables for the loop*/
-    int i, j;
-    for(i=0; i<10; i++) {
-        for(j=0;j<20;j++) {
-            printf("Enter value for resourceTable[%d][%d]:", i, j);
-            scanf("%d", &resourceTable[i][j]);
+                    exit(0);
+            break;
+        case 'f':
+            logFile = optarg; 
+            break;
+        default:
+            printf ("Invalid option %c \n", optopt);
+            return (EXIT_FAILURE);
         }
     }
 
-    //Displaying array elements
-    printf("Two Dimensional array elements:\n");
-    for(i=0; i<10; i++) {
-        for(j=0;j<20;j++) {
-            printf("%d ", resourceTable[i][j]);
-            if(j==2){
-                printf("\n");
-            }
+    int resourceTable[18][10];
+    int i;
+    int j;
+    
+    for(i = 0; i < 18; i++){
+        for(j = 0; j < 10; j++){
+            resourceTable[i][j] = 0;
         }
     }
 
-return 0;
+
+
+    for(i=0;i<10;i++){
+        printf("R%i\t", i);
+    }
+    printf("\n");
+    for(i = 0; i < 18; i++){
+        printf("P%i\t", i);
+        for(j = 0; j < 10; j++){
+            prtinf("%i", resourceTable[i][j]);
+        }
+        prtinf("\n")
+    }
+
+    return 0;
 }
+
+//     //Open the log file before input begins 
+//     fileLogging = fopen(logFile, "w+");
+
 //     //initialize the resource table
 //     int j;
 //     for(j=0;j<20;j++){
@@ -142,7 +135,7 @@ return 0;
 //         exit(1);
 //     }
 
-//     //open an existing message queue or create a new one
+//     //create a new message queue
 //     int msqid;
 //     if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
 //       perror("Failed to create new private message queue");
@@ -168,7 +161,6 @@ return 0;
 //       perror( "clock gettime" );
 //       return EXIT_FAILURE;
 //     }
-
 
 //     //intialize values for use in while loop
 //     int childrenToLaunch = 0;
@@ -256,7 +248,7 @@ return 0;
 //         }
 
 //         //Write the seconds and nanoseconds to memory for children to read
-//         struct PCB writeToMem;
+//         struct RT writeToMem;
 //         writeToMem.sec = sec;
 //         writeToMem.nano = nano;
 
