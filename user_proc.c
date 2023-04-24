@@ -14,7 +14,7 @@ struct msgqueue {
 int main(int argc, char *argv[]){
 
 
-    printf("Heya, I got created");
+    printf("Heya, I got created\n");
     return 0;
 
 //     int termTimeS;
