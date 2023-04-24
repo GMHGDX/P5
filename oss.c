@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
     }
 
 
-
+    printf("\t");
     for(i=0;i<10;i++){
         printf("R%i\t", i);
     }
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
     for(i = 0; i < 18; i++){
         printf("P%i\t", i);
         for(j = 0; j < 10; j++){
-            printf("%i", resourceTable[i][j]);
+            printf("%i\t", resourceTable[i][j]);
         }
         printf("\n");
     }
