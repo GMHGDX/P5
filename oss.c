@@ -100,9 +100,9 @@ int main(int argc, char *argv[]){
     for(i = 0; i < 18; i++){
         printf("P%i\t", i);
         for(j = 0; j < 10; j++){
-            prtinf("%i", resourceTable[i][j]);
+            printf("%i", resourceTable[i][j]);
         }
-        prtinf("\n");
+        printf("\n");
     }
 
     return 0;
