@@ -91,7 +91,8 @@ int main(int argc, char *argv[]){
         }
     }
 
-
+    resourceTable[5][4] = 7;
+    resourceTable[1][0] = 4;
     printf("\t");
     for(i=0;i<10;i++){
         printf("R%i\t", i);
