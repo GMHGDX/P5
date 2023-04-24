@@ -84,7 +84,7 @@ int main(int argc, char *argv[]){
     int resourceTable[18][10];
     int i;
     int j;
-    
+
     for(i = 0; i < 18; i++){
         for(j = 0; j < 10; j++){
             resourceTable[i][j] = 0;
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]){
         for(j = 0; j < 10; j++){
             prtinf("%i", resourceTable[i][j]);
         }
-        prtinf("\n")
+        prtinf("\n");
     }
 
     return 0;
