@@ -96,6 +96,10 @@ int main(int argc, char *argv[]){
     //copy our new string into mtext
     strcpy(buf.strData, together);
 
+    //for sending message to the parent
+    buf.intData = getppid();
+    buf.mtype = (long)getppid();
+
     //send our string to message queue
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){
         perror("msgsnd to child 1 failed\n");
