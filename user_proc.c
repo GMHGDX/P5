@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
     double readFromMem;
     readFromMem = *shm_ptr;
 
-    printf("\nThis is the number child read from memory: %lf", readFromMem.currentTime);
+    printf("\nThis is the number child read from memory: %lf", readFromMem);
 
    // --------------------------------------------------------------------------------//
 

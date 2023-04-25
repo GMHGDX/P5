@@ -176,10 +176,12 @@ int main(int argc, char *argv[]){
         currentTime = sec + nano/BILLION;
 
         //Write the seconds and nanoseconds to memory for children to read
-        writeToMem.currentTime = currentTime;
+        writeToMem = currentTime;
 
         *shm_ptr = writeToMem;
         writeToMem = *shm_ptr;
+
+        prinf("wrote to mem: %lf\n", currentTime);
     
         if(limitReach <= currentTime){
             numofchild++;
