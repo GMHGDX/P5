@@ -3,6 +3,7 @@
 #include <stdlib.h> //EXIT_FAILURE
 #include <sys/shm.h> //Shared memory
 #include <sys/msg.h> //message queues
+#include <time.h> //to create system time
 #include "oss.h"
 
 //for message queue
