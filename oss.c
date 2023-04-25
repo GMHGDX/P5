@@ -215,7 +215,7 @@ int main(int argc, char *argv[]){
                 buf.mtype = childpid;
                 buf.intData = childpid; // we will give it the pid we are sending to, so we know it received it
 
-                snprintf(msgForChild, sizeof(childpid), "%i", childpid); //convert int message to string
+                snprintf(msgForChild, sizeof(msgForChild), "%i", childpid); //convert int message to string
                 printf("Sending message to child: %s with pid %d \n", msgForChild, childpid);
 
                 //copy msg contents into the buffer
