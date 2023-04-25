@@ -97,7 +97,7 @@ int main(int argc, char *argv[]){
     strcpy(buf.strData, together);
 
     //for sending message to the parent
-    buf.intData = getppid();
+    buf.intData = getpid();
     buf.mtype = (long)getppid();
 
     //send our string to message queue
