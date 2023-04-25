@@ -12,9 +12,20 @@ struct msgqueue {
 }msq;
 
 int main(int argc, char *argv[]){
+    int resourceLim = 20;
+    int resourceAsk[10];
 
+    resourceAsk = randomNumberGenerator(resourceLim);
 
-    printf("Heya, I got created\n");
+    int i;
+    for(i=0;i<10;i++){
+        resourceAsk[i] = randomNumberGenerator(resourceLim);
+    }
+
+    for(i=0;i<10;i++){
+        prinf("I need: %i", resourceAsk[i]);
+    }
+    printf("\n");
     return 0;
 
 //     int termTimeS;

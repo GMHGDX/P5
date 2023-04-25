@@ -31,22 +31,11 @@ struct msgqueue {
     char mtext[200];
 }msq;
 
-//Create random second and nanosecond in bound of user input
-int randomNumberGenerator(int limit)
-{
-    int sec;
-
-    sec = (rand() % (limit)) + 1;
-
-    return sec;
-}
-
 int main(int argc, char *argv[]){
     //logfile declaration
     char* logFile = "logfile";
 
-    //20 instances of each resource 
-    int R0, R1, R2, R3, R4, R5, R6, R7, R8, R9 = 20;
+
 
     //variables for our system clock
     struct timespec start, stop;
@@ -245,7 +234,7 @@ int main(int argc, char *argv[]){
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
         }
-        if(numofchild > 1){
+        if(numofchild > 0){
             break;
         }
     }  
