@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
     int resourceLim = 20;
     int resourceAsk[10];
 
-    resourceAsk = randomNumberGenerator(resourceLim);
+    //resourceAsk = randomNumberGenerator(resourceLim);
 
     int i;
     for(i=0;i<10;i++){
