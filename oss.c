@@ -181,7 +181,7 @@ int main(int argc, char *argv[]){
         *shm_ptr = writeToMem;
         writeToMem = *shm_ptr;
 
-        prinf("wrote to mem: %lf\n", currentTime);
+        printf("wrote to mem: %lf\n", currentTime);
     
         if(limitReach <= currentTime){
             numofchild++;
