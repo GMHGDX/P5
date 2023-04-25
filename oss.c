@@ -201,6 +201,7 @@ int main(int argc, char *argv[]){
 
             //combine seconds, milliseconds, and nanoseconds as one decimal to get new time to fork process
             limitReach = sec + (double)(milliSec/1000) + (double)(nano/BILLION);
+
             printf("we are making a new process at: %lf\n", limitReach); 
             printf("sec is %lf, mili  is %lf, nano is %lf\n", sec, (double)(milliSec/1000), (double)(nano/BILLION)); 
 
@@ -244,7 +245,7 @@ int main(int argc, char *argv[]){
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
         }
-        if(numofchild > 0){
+        if(numofchild > 1){
             break;
         }
     }  
