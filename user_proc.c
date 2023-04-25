@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
     }
 
     for(i=0;i<10;i++){
-        prinf("I need: %i", resourceAsk[i]);
+        printf("I need: %i", resourceAsk[i]);
     }
     printf("\n");
     return 0;
