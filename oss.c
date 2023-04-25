@@ -195,7 +195,7 @@ int main(int argc, char *argv[]){
     
         if(limitReach <= currentTime){
             numofchild++;
-            childpid = fork(); //fork child
+           
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
             printf("random milliSecond: %i\n", milliSec);
 
@@ -203,6 +203,8 @@ int main(int argc, char *argv[]){
             limitReach = sec + (double)(milliSec/1000) + (double)(nano/BILLION);
             printf("we are making a new process at: %lf\n", limitReach); 
             printf("sec is %lf, mili  is %lf, nano is %lf\n", sec, (double)(milliSec/1000), (double)(nano/BILLION)); 
+
+            childpid = fork(); //fork child
 
             if (childpid == -1) {
                 perror("Failed to fork");
