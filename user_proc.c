@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
     printf("These are your resources in one string format: %s\n", together); //testing
 
     //copy our new string into mtext
-    strcpy(msq.mtext, together);
+    strcpy(buf.mtext, together);
 
     //send our string to message queue
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){
