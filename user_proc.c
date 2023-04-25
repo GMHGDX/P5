@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
         exit(1);
     }
     //access oss.c message queue
-    if ((msqid = msgget(key, PERMS)) == -1) {
+    if ((msqid = msgget(msqkey, PERMS)) == -1) {
         perror("msgget in child");
         exit(1);
     }
@@ -93,14 +93,14 @@ int main(int argc, char *argv[]){
 
     printf("These are your resources in one string format: %s\n", together); //testing
 
-    //copy our new string into mtext
-    strcpy(msq.mtext, together);
+    // //copy our new string into mtext
+    // strcpy(msq.mtext, together);
 
-    //send our string to message queue
-    if(msgsnd(msqid, &msq, sizeof(msq), 0 == -1)){
-        perror("msgsnd to child 1 failed\n");
-        exit(1);
-    }
+    // //send our string to message queue
+    // if(msgsnd(msqid, &msq, sizeof(msq), 0 == -1)){
+    //     perror("msgsnd to child 1 failed\n");
+    //     exit(1);
+    // }
 
 
 
