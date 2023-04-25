@@ -15,7 +15,33 @@ int main(int argc, char *argv[]){
     int resourceLim = 20;
     int resourceAsk[10];
 
-    //resourceAsk = randomNumberGenerator(resourceLim);
+    srand(time(0));
+
+    // //grab sh_key from oss for shared memory
+    // int sh_key = atoi(argv[1]);
+
+    // //get shared memory
+    // int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
+    // if(shm_id <= 0) {
+    //     fprintf(stderr,"CHILD ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
+    //     exit(1);
+    // }
+
+   // --------------------------------------------------------------------------------//
+
+    // //Create key using ftok() for more uniqueness
+    // key_t msqkey;
+    // if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
+    //     perror("IPC error: ftok");
+    //     exit(1);
+    // }
+
+    // //open an existing message queue or create a new one
+    // int msqid;
+    // if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
+    //   perror("Failed to create new private message queue");
+    //   exit(1);
+    // }
 
     int i;
     for(i=0;i<10;i++){
@@ -27,7 +53,35 @@ int main(int argc, char *argv[]){
         printf("%i ", resourceAsk[i]);
     }
     printf("\n");
+
+    //concatenate all the resources requested by the process in one string
+    char *together;
+    char resourceAsk_string[50];
+    together = malloc(strlen(resourceAsk_string)*10 + 1 + 1);
+    
+
+    for(i=0;i<10;i++){
+        snprintf(resourceAsk_string, sizeof(resourceAsk_string), "%i", resourceAsk[i]); //convert integer to char string 
+        strcpy(together, resourceAsk_string);
+
+        if(i < 9){
+            strcat(together, " ");
+        }
+         printf("added %s String is now %s\n", resourceAsk_string, together);
+    }
+
+
+    printf("These are your resources in one string format: %s\n", together); //testing
+
+    // //copy our new string into mtext
+    // strcpy(msq.mtext, resourceAsk);
+
+    // //send our string to message queue
+    // msgsnd(msqid, &msq, sizeof(msq), 0);
+
     return 0;
+
+//--------------------------------------------------------------------------------------------------//
 
 //     int termTimeS;
 //     int termTimeNano;
@@ -35,52 +89,12 @@ int main(int argc, char *argv[]){
 //     int sysClockNano;
 //     int checkSec = 0;
 
-//     // //grab sh_key from oss for shared memory
-//     int sh_key = atoi(argv[1]);
-
-//     //Grab same key oss.c grabbed for message queue
-//     key_t msgkey;
-//     if((msgkey = ftok("oss.h", 'a')) == (key_t) -1){
-//         perror("IPC error: ftok");
-//         exit(1);
-//     }
-
-//     //connect to the queue
-//     int msqid;
-//     if ((msqid = msgget(msgkey, PERMS)) == -1) {
-//       perror("msgget");
-//       exit(1);
-//    }
-
-//     //recieve the message
-//     msgrcv(msqid, &msq, sizeof(msq), 1, 0);
-
 //     // initialization for string loop
 //     int seperate = 0;
 //     int sec;
 //     int nanosec;
 
-//     //seperate the message by white space and assign it to seconds and nanoseconds respectively
-//     char * text = strtok(msq.mtext, " ");
-//         while( text != NULL ) {
-//             seperate++;
-//             if(seperate == 1){
-//                 sec = atoi(text); //assign second as an integer
-//                 text = strtok(NULL, " ");
-//             }
-//             if(seperate == 2){
-//                 nanosec = atoi(text); //assign nanosecond as an integer
-//                 text = strtok(NULL, " ");
-//                 break;
-//             }
-//     }
 
-//     //get shared memory
-//     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
-//     if(shm_id <= 0) {
-//         fprintf(stderr,"CHILD ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
-//         exit(1);
-//     }
 
 //     //attatch memory we allocated to our process and point pointer to it 
 //     struct PCB *shm_ptr = (struct PCB*) (shmat(shm_id, 0, 0));

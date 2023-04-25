@@ -212,7 +212,7 @@ int main(int argc, char *argv[]){
             }
             if(childpid != 0 ){ 
                 // //initialize mtype to 1
-                // msq.mtype = 1;
+                msq.mtype = 1;
                 // char sec_string[50];
                 // char nano_string[50];
 
@@ -234,6 +234,9 @@ int main(int argc, char *argv[]){
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
         }
+
+        // //recieve the message
+    // msgrcv(msqid, &msq, sizeof(msq), 1, 0);
         if(numofchild > 0){
             break;
         }
