@@ -62,7 +62,11 @@ int main(int argc, char *argv[]){
 
     for(i=0;i<10;i++){
         snprintf(resourceAsk_string, sizeof(resourceAsk_string), "%i", resourceAsk[i]); //convert integer to char string 
-        strcpy(together, resourceAsk_string);
+        if(i=0){
+            strcpy(together, resourceAsk_string);
+        }else{
+            strcat(together, resourceAsk_string);
+        }
 
         if(i < 9){
             strcat(together, " ");
