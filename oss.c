@@ -119,9 +119,6 @@ int main(int argc, char *argv[]){
     //Create random millisecond between 1 - 500
     srand(time(0));
 
-    int milliSec = randomNumberGenerator(milliLim);
-
-    printf("random milliSecond 1: %i\n", milliSec);
 
     //Create shared memory, key
     const int sh_key = 3147550;
@@ -168,10 +165,11 @@ int main(int argc, char *argv[]){
 
     //----------------------------------------------------------------------------------------------------------------------------------------
     //for forking the first child on the first loop
-    milliSec = 0;
+    int milliSec = 0;
 
     //Loop to handle our children processes and print the process table
     while(1) {
+        printf("num of children %i\n", numofchild);
         //stop simulated system clock
         if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
             perror( "clock gettime" );
@@ -180,7 +178,6 @@ int main(int argc, char *argv[]){
         
         sec = (stop.tv_sec - start.tv_sec); 
         nano = (double)( stop.tv_nsec - start.tv_nsec);
-        printf("second: %lf\n", sec);
 
         //if start time nanosecond is greater than stop, carry the one to get positive nanosecond
         if(start.tv_nsec > stop.tv_nsec){
@@ -200,6 +197,7 @@ int main(int argc, char *argv[]){
             numofchild++;
             childpid = fork(); //fork child
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
+            printf("random milliSecond: %i\n", milliSec);
 
             //combine seconds, milliseconds, and nanoseconds as one decimal to get new time to fork process
             limitReach = sec + (double)(milliSec/1000) + (double)(nano/BILLION);
