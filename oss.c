@@ -221,7 +221,7 @@ int main(int argc, char *argv[]){
                 //copy msg contents into the buffer
                 strcpy(buf.strData, msgForChild);
 
-                //send message to worker process
+                //send message to user_proc
                 if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) {
                     perror("msgsnd to child 1 failed\n");
                     exit(1);
@@ -247,26 +247,16 @@ int main(int argc, char *argv[]){
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
         }
-        //Grab same key user_proc.c grabbed used for message queue
-        key_t msgkey;
-        if((msgkey = ftok("oss.h", 'a')) == (key_t) -1){
-            perror("IPC error: ftok");
-            exit(1);
-        }
 
-        //connect to the queue
-        int msqid;
-        if ((msqid = msgget(msgkey, PERMS)) == -1) {
-            perror("msgget");
-            exit(1);
-        }   
-
-        // receive a message from oss, but only one for our PID
+        // receive a message from user_proc, but only one for our PID
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) {
             perror("failed to receive message from parent\n");
             exit(1);
         }
+        
+        printf("OSS recieved--> Child: %d resources: %s my int data: %d\n",getpid(), buf.strData, buf.intData);
 
+        //wait for child to finish in user_proc
         wait(0);
 
         if(numofchild > 0){

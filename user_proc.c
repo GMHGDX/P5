@@ -93,16 +93,14 @@ int main(int argc, char *argv[]){
 
     printf("These are your resources in one string format: %s\n", together); //testing
 
-    // //copy our new string into mtext
-    // strcpy(msq.mtext, together);
+    //copy our new string into mtext
+    strcpy(msq.mtext, together);
 
-    // //send our string to message queue
-    // if(msgsnd(msqid, &msq, sizeof(msq), 0 == -1)){
-    //     perror("msgsnd to child 1 failed\n");
-    //     exit(1);
-    // }
-
-
+    //send our string to message queue
+    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){
+        perror("msgsnd to child 1 failed\n");
+        exit(1);
+    }
 
     return 0;
 
