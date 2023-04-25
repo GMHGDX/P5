@@ -6,13 +6,14 @@
 #include <time.h> //to create system time
 #include "oss.h"
 
-//for message queue
-struct msgqueue {
-    long mtype;
-    char mtext[200];
-}msq;
+
 
 int main(int argc, char *argv[]){
+    msgbuffer buf;
+    buf.mtype = 1;
+    int msqid = 0;
+    key_t msqkey;
+
     int resourceLim = 20;
     int resourceAsk[10];
 
@@ -42,21 +43,24 @@ int main(int argc, char *argv[]){
     printf("\nThis is the number child read from memory: %lf", readFromMem);
 
    // --------------------------------------------------------------------------------//
+    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
+        perror("IPC error: ftok");
+        exit(1);
+    }
+    //access oss.c message queue
+    if ((msqid = msgget(key, PERMS)) == -1) {
+        perror("msgget in child");
+        exit(1);
+    }
 
-    // //Create key using ftok() for more uniqueness
-    // key_t msqkey;
-    // if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
-    //     perror("IPC error: ftok");
-    //     exit(1);
-    // }
+    // receive a message from oss, but only one for our PID
+    if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) {
+        perror("failed to receive message from parent\n");
+        exit(1);
+    }
+    printf("Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData);
 
-    // //open an existing message queue or create a new one
-    // int msqid;
-    // if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
-    //   perror("Failed to create new private message queue");
-    //   exit(1);
-    // }
-
+    // --------------------------------------------------------------------------------//
     int i;
     for(i=0;i<10;i++){
         resourceAsk[i] = randomNumberGenerator(resourceLim);
@@ -89,11 +93,16 @@ int main(int argc, char *argv[]){
 
     printf("These are your resources in one string format: %s\n", together); //testing
 
-    // //copy our new string into mtext
-    // strcpy(msq.mtext, resourceAsk);
+    //copy our new string into mtext
+    strcpy(msq.mtext, together);
 
-    // //send our string to message queue
-    // msgsnd(msqid, &msq, sizeof(msq), 0);
+    //send our string to message queue
+    if(msgsnd(msqid, &msq, sizeof(msq), 0 == -1)){
+        perror("msgsnd to child 1 failed\n");
+        exit(1);
+    }
+
+
 
     return 0;
 

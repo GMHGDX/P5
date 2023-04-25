@@ -18,3 +18,10 @@ int randomNumberGenerator(int limit)
 
     return sec;
 }
+
+//msgbuffer for message queue
+typedef struct msgbuffer {
+    long mtype;
+    char strData[100];
+    int intData;
+} msgbuffer;

@@ -25,11 +25,6 @@
 
 void printTable();
 
-//My message queue initialization
-struct msgqueue {
-    long mtype;
-    char mtext[200];
-}msq;
 
 int main(int argc, char *argv[]){
     //logfile declaration
@@ -117,7 +112,16 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
-    //create a new message queue
+    msgbuffer buf;
+
+    //Create key using ftok() for more uniqueness
+    key_t msqkey;
+    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
+        perror("IPC error: ftok");
+        exit(1);
+    }
+
+    //open an existing message queue or create a new one
     int msqid;
     if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
       perror("Failed to create new private message queue");
@@ -149,6 +153,10 @@ int main(int argc, char *argv[]){
     double limitReach = 0;
     double writeToMem;
     int numofchild = 0;
+
+    char msgForChild[10];                                //initialize char for conversion
+
+
 
     //----------------------------------------------------------------------------------------------------------------------------------------
     //for forking the first child on the first loop
@@ -210,8 +218,22 @@ int main(int argc, char *argv[]){
                 return 1;
             }
             if(childpid != 0 ){ 
-                // //initialize mtype to 1
-                msq.mtype = 1;
+                // //initialize mtype to the child's pid
+                buf.mtype = childpid;
+                buf.intData = childpid; // we will give it the pid we are sending to, so we know it received it
+
+                printf("Sending message to child %i with pid %d \n", childNum, child[childNum]);
+
+                snprintf(msgForChild, sizeof(childpid), "%i", childpid); //convert int message to string
+
+                //copy msg contents into the buffer
+                strcpy(buf.strData, msgForChild);
+
+                //send message to worker process
+                if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) {
+                    perror("msgsnd to child 1 failed\n");
+                    exit(1);
+                }
                 // char sec_string[50];
                 // char nano_string[50];
 
@@ -233,11 +255,28 @@ int main(int argc, char *argv[]){
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
         }
+        //Grab same key user_proc.c grabbed used for message queue
+        key_t msgkey;
+        if((msgkey = ftok("oss.h", 'a')) == (key_t) -1){
+            perror("IPC error: ftok");
+            exit(1);
+        }
+
+        //connect to the queue
+        int msqid;
+        if ((msqid = msgget(msgkey, PERMS)) == -1) {
+            perror("msgget");
+            exit(1);
+        }   
+
+        // receive a message from oss, but only one for our PID
+        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) {
+            perror("failed to receive message from parent\n");
+            exit(1);
+        }
 
         wait(0);
 
-        // //recieve the message
-    // msgrcv(msqid, &msq, sizeof(msq), 1, 0);
         if(numofchild > 0){
             break;
         }
