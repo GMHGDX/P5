@@ -170,7 +170,7 @@ int main(int argc, char *argv[]){
     //for forking the first child on the first loop
     milliSec = 0;
     sec = 5;
-    printf("Before everything sec is: %ld", sec);
+    printf("Before everything sec is: %ld\n", sec);
 
     //Loop to handle our children processes and print the process table
     while(1) {
@@ -182,7 +182,7 @@ int main(int argc, char *argv[]){
         
         sec = (stop.tv_sec - start.tv_sec); 
         nano = (double)( stop.tv_nsec - start.tv_nsec);
-        printf("second: %ld", sec);
+        printf("second: %ld\n", sec);
 
         //if start time nanosecond is greater than stop, carry the one to get positive nanosecond
         if(start.tv_nsec > stop.tv_nsec){
