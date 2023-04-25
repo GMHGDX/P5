@@ -17,15 +17,28 @@ int main(int argc, char *argv[]){
 
     srand(time(0));
 
-    // //grab sh_key from oss for shared memory
-    // int sh_key = atoi(argv[1]);
+    //grab sh_key from oss for shared memory
+    int sh_key = atoi(argv[1]);
 
-    // //get shared memory
-    // int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
-    // if(shm_id <= 0) {
-    //     fprintf(stderr,"CHILD ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
-    //     exit(1);
-    // }
+    //get shared memory
+    int shm_id = shmget(sh_key, sizeof(double), 0666);
+    if(shm_id <= 0) {
+        fprintf(stderr,"CHILD ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
+        exit(1);
+    }
+
+    //attatch memory we allocated to our process and point pointer to it 
+    double *shm_ptr = (double*) (shmat(shm_id, 0, 0));
+    if (shm_ptr <= 0) {
+        fprintf(stderr,"Child Shared memory attach failed\n");
+        exit(1);
+    }
+
+    //read time from memory
+    double readFromMem;
+    readFromMem = *shm_ptr;
+
+    printf("\nThis is the number child read from memory: %lf", readFromMem.currentTime);
 
    // --------------------------------------------------------------------------------//
 
@@ -67,13 +80,11 @@ int main(int argc, char *argv[]){
         }else{
             strcat(together, resourceAsk_string);
         }
-
         if(i < 9){
             strcat(together, " ");
         }
          printf("added %s String is now %s\n", resourceAsk_string, together);
     }
-
 
     printf("These are your resources in one string format: %s\n", together); //testing
 
@@ -101,14 +112,14 @@ int main(int argc, char *argv[]){
 
 
 //     //attatch memory we allocated to our process and point pointer to it 
-//     struct PCB *shm_ptr = (struct PCB*) (shmat(shm_id, 0, 0));
+//     double *shm_ptr = (double*) (shmat(shm_id, 0, 0));
 //     if (shm_ptr <= 0) {
 //         fprintf(stderr,"Child Shared memory attach failed\n");
 //         exit(1);
 //     }
 
 //     //read time from memory
-//     struct PCB readFromMem;
+//     double readFromMem;
 //     readFromMem = *shm_ptr;
 
 //     //Figure out when to terminate

@@ -127,14 +127,14 @@ int main(int argc, char *argv[]){
    }
 
     //create shared memory
-    int shm_id = shmget(sh_key, sizeof(struct sysTime), IPC_CREAT | 0666);
+    int shm_id = shmget(sh_key, sizeof(double), IPC_CREAT | 0666);
     if(shm_id <= 0) {
         fprintf(stderr,"ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
         exit(1);
     }
 
     //attatch memory we allocated to our process and point pointer to it 
-    struct sysTime *shm_ptr = (struct sysTime*) (shmat(shm_id, NULL, 0));
+    double *shm_ptr = (double*) (shmat(shm_id, NULL, 0));
     if (shm_ptr <= 0) {
         fprintf(stderr,"Shared memory attach failed\n");
         exit(1);
@@ -149,7 +149,7 @@ int main(int argc, char *argv[]){
     //intialize values for use in while loop
     double currentTime;
     double limitReach = 0;
-    struct sysTime writeToMem;
+    double writeToMem;
     int numofchild = 0;
 
     //----------------------------------------------------------------------------------------------------------------------------------------
@@ -176,8 +176,7 @@ int main(int argc, char *argv[]){
         currentTime = sec + nano/BILLION;
 
         //Write the seconds and nanoseconds to memory for children to read
-        writeToMem.sec = sec;
-        writeToMem.nano = nano;
+        writeToMem.currentTime = currentTime;
 
         *shm_ptr = writeToMem;
         writeToMem = *shm_ptr;
