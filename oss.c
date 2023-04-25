@@ -105,13 +105,6 @@ int main(int argc, char *argv[]){
     //Create shared memory, key
     const int sh_key = 3147550;
 
-    //Create key using ftok() for more uniqueness
-    key_t msqkey;
-    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
-        perror("IPC error: ftok");
-        exit(1);
-    }
-
     msgbuffer buf;
 
     //Create key using ftok() for more uniqueness
@@ -222,9 +215,8 @@ int main(int argc, char *argv[]){
                 buf.mtype = childpid;
                 buf.intData = childpid; // we will give it the pid we are sending to, so we know it received it
 
-                printf("Sending message to child %i with pid %d \n", childNum, child[childNum]);
-
                 snprintf(msgForChild, sizeof(childpid), "%i", childpid); //convert int message to string
+                printf("Sending message to child: %s with pid %d \n", msgForChild, childpid);
 
                 //copy msg contents into the buffer
                 strcpy(buf.strData, msgForChild);
