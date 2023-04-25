@@ -162,15 +162,13 @@ int main(int argc, char *argv[]){
 
     //intialize values for use in while loop
     double currentTime;
-    double limitReach;
+    double limitReach = 0;
     struct sysTime writeToMem;
     int numofchild = 0;
 
     //----------------------------------------------------------------------------------------------------------------------------------------
     //for forking the first child on the first loop
     milliSec = 0;
-    sec = 5;
-    printf("Before everything sec is: %lf\n", sec);
 
     //Loop to handle our children processes and print the process table
     while(1) {
@@ -246,7 +244,7 @@ int main(int argc, char *argv[]){
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
         }
-        if(numofchild>0){
+        if(numofchild > 0){
             break;
         }
     }  
