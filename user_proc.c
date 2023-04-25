@@ -22,8 +22,9 @@ int main(int argc, char *argv[]){
         resourceAsk[i] = randomNumberGenerator(resourceLim);
     }
 
+     printf("I need: ");
     for(i=0;i<10;i++){
-        printf("I need: %i", resourceAsk[i]);
+        printf("%i ", resourceAsk[i]);
     }
     printf("\n");
     return 0;
