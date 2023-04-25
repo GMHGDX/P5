@@ -35,8 +35,6 @@ int main(int argc, char *argv[]){
     //logfile declaration
     char* logFile = "logfile";
 
-
-
     //variables for our system clock
     struct timespec start, stop;
     double sec;
@@ -204,6 +202,8 @@ int main(int argc, char *argv[]){
             if (childpid == 0){  //send shared memory key to user_proc for children to use 
                 char sh_key_string[50];
                 snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
+
+                printf("shkey oss: %s\n", sh_key_string);
 
                 char *args[] = {"user_proc", sh_key_string, NULL};
                 //exec function to send children to user_proc along with our shared memory key
