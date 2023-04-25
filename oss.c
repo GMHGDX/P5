@@ -248,6 +248,11 @@ int main(int argc, char *argv[]){
             }
         }
 
+        if ((msqid = msgget(msqkey, PERMS)) == -1) {
+            perror("Failed to create new private message queue");
+            exit(1);
+        }
+
         // receive a message from user_proc, but only one for our PID
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) {
             perror("failed to receive message from parent\n");
