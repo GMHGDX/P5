@@ -203,8 +203,6 @@ int main(int argc, char *argv[]){
                 char sh_key_string[50];
                 snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
 
-                printf("shkey oss: %s\n", sh_key_string);
-
                 char *args[] = {"user_proc", sh_key_string, NULL};
                 //exec function to send children to user_proc along with our shared memory key
                 execvp("./user_proc", args);
@@ -235,6 +233,8 @@ int main(int argc, char *argv[]){
                 // msgsnd(msqid, &msq, sizeof(msq), 0);
             }
         }
+
+        wait(0);
 
         // //recieve the message
     // msgrcv(msqid, &msq, sizeof(msq), 1, 0);

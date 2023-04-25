@@ -21,8 +21,6 @@ int main(int argc, char *argv[]){
     //grab sh_key from oss for shared memory
     int sh_key = atoi(argv[1]);
 
-    printf("shkey worker: %i\n", sh_key);
-
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(double), 0666);
     if(shm_id <= 0) {
