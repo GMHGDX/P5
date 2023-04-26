@@ -23,14 +23,12 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
-void printTable();
+void printResourcetable(int resourceTable[][]);
 
 typedef struct pidstruct {
     pid_t realpid;
     int simpid;
 } pidstruct;
-
-
 
 int main(int argc, char *argv[]){
     pidstruct mypidstruct[50];
@@ -241,7 +239,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-void printResourcetable(int resourceTable[]){
+void printResourcetable(int resourceTable[][]){
     int i, j;
     //Create resource header
     printf("\t");
