@@ -127,9 +127,8 @@ int main(int argc, char *argv[]){
     int numofchild = 0; //DELETEEEEEEEEE
     char msgForChild[10]; //char 0for converting int sent to user_proc
     int milliSec = 0; //milliseconds used in time limit
-    int seperate = 0; //seperate message recieved by whitespace 
-    int reasourcesUsed[10];
-    char* text;
+    int reasourcesUsed[10]; //resources in an array
+    char* text; //used to seperate message recieved by whitespace 
 
     //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
