@@ -242,6 +242,7 @@ int main(int argc, char *argv[]){
 }
 
 void printResourcetable(int resourceTable[]){
+    int i, j;
     //Create resource header
     printf("\t");
     for(i=0;i<10;i++){
