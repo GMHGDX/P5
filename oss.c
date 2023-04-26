@@ -1,6 +1,6 @@
 //copy assignment 3
-    //random number generator for forked processes (release and aquire new resources, update resource table)
-    //message queue to communicate requests, allocation, and release of resources 
+    //release and aquire new resources, update resource table
+    //add a sleeping queue for when there are not enough resources to request 
     //add deadlock detection and recovery algorithm (add fixed time to continuosly check this)
 
     //test in log file
@@ -27,8 +27,11 @@ void printTable();
 
 
 int main(int argc, char *argv[]){
-    //logfile declaration
-    char* logFile = "logfile";
+    char* logFile = "logfile"; //logfile declaration
+    FILE *fileLogging; //for the file 
+    pid_t childpid = 0; //child process ID 
+    int resourceTable[18][10]; //Initialize resource table
+    srand(time(0)); //Seed the random number generator
 
     //variables for our system clock
     struct timespec start, stop;
@@ -36,11 +39,11 @@ int main(int argc, char *argv[]){
     double nano;
     int milliLim = 500; //time limit for random forked processes in milliseconds
 
-    //for the file 
-    FILE *fileLogging;
-
-    //child process ID
-    pid_t childpid = 0;
+    //Create shared memory key and message buffer for message queue
+    const int sh_key = 3147550;     
+    key_t msqkey;
+    int msqid;
+    msgbuffer buf;
 
     //Parse through command line options
 	char opt;
@@ -67,9 +70,6 @@ int main(int argc, char *argv[]){
         }
     }
 
-    //Initialize resource table
-    int resourceTable[18][10];
-
     //Create empty resource table (all zeros)
     int i;
     int j;
@@ -94,76 +94,38 @@ int main(int argc, char *argv[]){
         }
         printf("\n");
     }
+    
+    fileLogging = fopen(logFile, "w+"); //Open the log file before input begins 
 
-    //Open the log file before input begins 
-    fileLogging = fopen(logFile, "w+");
-
-    //Create random millisecond between 1 - 500
-    srand(time(0));
-
-
-    //Create shared memory, key
-    const int sh_key = 3147550;
-
-    msgbuffer buf;
-
-    //Create key using ftok() for more uniqueness
-    key_t msqkey;
-    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
-        perror("IPC error: ftok");
-        exit(1);
-    }
-
-    //open an existing message queue or create a new one
-    int msqid;
-    if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
-      perror("Failed to create new private message queue");
-      exit(1);
-   }
+    //Create message queue
+    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //Create key using ftok() for more uniquenes
+    if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) { perror("Failed to create new private message queue"); exit(1); } //open an existing message queue or create a new one
 
     //create shared memory
     int shm_id = shmget(sh_key, sizeof(double), IPC_CREAT | 0666);
-    if(shm_id <= 0) {
-        fprintf(stderr,"ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
-        exit(1);
-    }
+    if(shm_id <= 0) {fprintf(stderr,"ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id); exit(1); }
 
     //attatch memory we allocated to our process and point pointer to it 
     double *shm_ptr = (double*) (shmat(shm_id, NULL, 0));
-    if (shm_ptr <= 0) {
-        fprintf(stderr,"Shared memory attach failed\n");
-        exit(1);
-    }
+    if (shm_ptr <= 0) { fprintf(stderr,"Shared memory attach failed\n"); exit(1); }
 
     //start the simulated system clock
-    if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) {
-      perror( "clock gettime" );
-      return EXIT_FAILURE;
-    }
+    if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) { perror( "clock gettime" ); return EXIT_FAILURE; }
 
     //intialize values for use in while loop
-    double currentTime;
-    double limitReach = 0;
+    double currentTime; //time going into shared memory
+    double limitReach = 0; //random time next child is forked 
     double writeToMem;
-    int numofchild = 0;
+    int numofchild = 0; //DELETEEEEEEEEE
+    char msgForChild[10]; //char 0for converting int sent to user_proc
+    int milliSec = 0; //milliseconds used in time limit
 
-    char msgForChild[10];                                //initialize char for conversion
-
-
-
-    //----------------------------------------------------------------------------------------------------------------------------------------
-    //for forking the first child on the first loop
-    int milliSec = 0;
-
-    //Loop to handle our children processes and print the process table
+    //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
-        printf("num of children %i\n", numofchild);
-        //stop simulated system clock
-        if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
-            perror( "clock gettime" );
-            return EXIT_FAILURE;
-        }
-        
+        printf("num of children %i\n", numofchild); //TESTING
+
+        //stop simulated system clock and get seconds and nanoseconds
+        if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) { perror( "clock gettime" ); return EXIT_FAILURE; }
         sec = (stop.tv_sec - start.tv_sec); 
         nano = (double)( stop.tv_nsec - start.tv_nsec);
 
@@ -174,94 +136,58 @@ int main(int argc, char *argv[]){
         }
         currentTime = sec + nano/BILLION;
 
-        //Write the seconds and nanoseconds to memory for children to read
+        //Write the current time to memory for children to read
         writeToMem = currentTime;
-
         *shm_ptr = writeToMem;
-        writeToMem = *shm_ptr;
+        //writeToMem = *shm_ptr;//TESTING (reading from share memory)
 
-        printf("wrote to mem: %lf\n", currentTime);
+        printf("wrote to mem: %lf\n", currentTime); //TESTING
     
-        if(limitReach <= currentTime){
+        if(limitReach <= currentTime){ //fork child if current time is more than random time to fork child
             numofchild++;
            
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
-            printf("random milliSecond: %i\n", milliSec);
+            printf("random milliSecond: %i\n", milliSec); //TESTING
 
-            //combine seconds, milliseconds, and nanoseconds as one decimal to get new time to fork process
-            limitReach = sec + (double)(milliSec/1000) + (double)(nano/BILLION);
+            limitReach = sec + (double)(milliSec/1000) + (double)(nano/BILLION); //combine sec, millisec, and nanosec as one decimal to get new time to fork process
 
-            printf("we are making a new process at: %lf\n", limitReach); 
-            printf("sec is %lf, mili  is %lf, nano is %lf\n", sec, (double)(milliSec/1000), (double)(nano/BILLION)); 
+            printf("we are making a new process at: %lf\n", limitReach);  //TESTING
+            printf("sec is %lf, mili  is %lf, nano is %lf\n", sec, (double)(milliSec/1000), (double)(nano/BILLION)); // TESTING 
 
             childpid = fork(); //fork child
 
-            if (childpid == -1) {
-                perror("Failed to fork");
-                return 1;
-            }
+            if (childpid == -1) { perror("Failed to fork"); return 1; }
             if (childpid == 0){  //send shared memory key to user_proc for children to use 
                 char sh_key_string[50];
                 snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
 
                 char *args[] = {"user_proc", sh_key_string, NULL};
-                //exec function to send children to user_proc along with our shared memory key
-                execvp("./user_proc", args);
+                execvp("./user_proc", args); //exec function to send children to user_proc along with our shared memory key
 
                 return 1;
             }
             if(childpid != 0 ){ 
-                // //initialize mtype to the child's pid
-                buf.mtype = childpid;
-                buf.intData = childpid; // we will give it the pid we are sending to, so we know it received it
+                buf.mtype = childpid; //initialize mtype to the child's pid
+                buf.intData = childpid; //we will give it the pid we are sending to, so we know it received it
 
                 snprintf(msgForChild, sizeof(msgForChild), "%i", childpid); //convert int message to string
-                printf("Sending message to child: %s with pid %d \n", msgForChild, childpid);
+                printf("Sending message to child: %s with pid %d \n", msgForChild, childpid); //TESTING
 
-                //copy msg contents into the buffer
-                strcpy(buf.strData, msgForChild);
-
+                strcpy(buf.strData, msgForChild); //copy msg contents into the buffer
+                
                 //send message to user_proc
-                if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) {
-                    perror("msgsnd to child 1 failed\n");
-                    exit(1);
-                }
-                // char sec_string[50];
-                // char nano_string[50];
-
-                // //convert integer to char string
-                // snprintf(sec_string, sizeof(sec_string), "%i", seconds);
-                // snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
-
-                // //add seconds and nanoseconds together with a space in between to send as one message
-                // char *together;
-                // together = malloc(strlen(sec_string) + strlen(nano_string) + 1 + 1);
-                // strcpy(together, sec_string);
-                // strcat(together, " ");
-                // strcat(together, nano_string);
-
-                // //copy our new string into mtext
-                // strcpy(msq.mtext, together);
-
-                // //send our string to message queue
-                // msgsnd(msqid, &msq, sizeof(msq), 0);
+                if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
             }
         }
 
-        printf("trying to read message from user_proc! msqid: %i", msqid);
-        
         // receive a message from user_proc, but only one for our PID
-        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) {
-            perror("failed to receive message from parent\n");
-            exit(1);
-        }
+        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }
         
-        printf("OSS recieved--> Child: %d resources: %s my int data: %d\n",getpid(), buf.strData, buf.intData);
+        printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
+    
+        wait(0); //wait for child to finish in user_proc
 
-        //wait for child to finish in user_proc
-        wait(0);
-
-        if(numofchild > 0){
+        if(numofchild > 0){ //TESTING
             break;
         }
     }  
@@ -271,12 +197,9 @@ int main(int argc, char *argv[]){
     shmctl( shm_id, IPC_RMID, NULL ); // Free shared memory segment shm_id 
 
     //Removes the message queue immediately
-    if (msgctl(msqid, IPC_RMID, NULL) == -1) {
-            perror("msgctl");
-            return EXIT_FAILURE;
-    }
+    if (msgctl(msqid, IPC_RMID, NULL) == -1) { perror("msgctl"); return EXIT_FAILURE; }
 
-    //close the log file
-    fclose(fileLogging);
+    fclose(fileLogging); //close the log file
+
     return 0;
 }

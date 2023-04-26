@@ -6,8 +6,6 @@
 #include <time.h> //to create system time
 #include "oss.h"
 
-
-
 int main(int argc, char *argv[]){
     msgbuffer buf;
     buf.mtype = 1;
@@ -17,58 +15,42 @@ int main(int argc, char *argv[]){
     int resourceLim = 20;
     int resourceAsk[10];
 
-    srand(time(0));
+    srand(time(0)); //seed for random number generator
 
     //grab sh_key from oss for shared memory
     int sh_key = atoi(argv[1]);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(double), 0666);
-    if(shm_id <= 0) {
-        fprintf(stderr,"CHILD ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
-        exit(1);
-    }
+    if(shm_id <= 0) { fprintf(stderr,"CHILD ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id); exit(1); }
 
     //attatch memory we allocated to our process and point pointer to it 
     double *shm_ptr = (double*) (shmat(shm_id, 0, 0));
-    if (shm_ptr <= 0) {
-        fprintf(stderr,"Child Shared memory attach failed\n");
-        exit(1);
-    }
+    if (shm_ptr <= 0) { fprintf(stderr,"Child Shared memory attach failed\n"); exit(1); }
 
     //read time from memory
     double readFromMem;
     readFromMem = *shm_ptr;
 
-    printf("\nThis is the number child read from memory: %lf", readFromMem);
+    printf("\nThis is the number child read from memory: %lf", readFromMem);  //TESTING
 
-   // --------------------------------------------------------------------------------//
-    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
-        perror("IPC error: ftok");
-        exit(1);
-    }
-    //access oss.c message queue
-    if ((msqid = msgget(msqkey, PERMS)) == -1) {
-        perror("msgget in child");
-        exit(1);
-    }
+    //message queue
+    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //get message queue key used in oss
+    if ((msqid = msgget(msqkey, PERMS)) == -1) { perror("msgget in child"); exit(1); } //access oss message queue
+    if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
 
-    // receive a message from oss, but only one for our PID
-    if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) {
-        perror("failed to receive message from parent\n");
-        exit(1);
-    }
-    printf("Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData);
+    printf("Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
 
-    // --------------------------------------------------------------------------------//
+    //Create a random number for how many instances of each resource the process wants and add it to an array
     int i;
     for(i=0;i<10;i++){
-        resourceAsk[i] = randomNumberGenerator(resourceLim);
+        resourceAsk[i] = randomNumberGenerator(resourceLim); 
     }
 
-     printf("I need: ");
+    printf("I need: "); //TESTING
+    //printing resources asked
     for(i=0;i<10;i++){
-        printf("%i ", resourceAsk[i]);
+        printf("%i ", resourceAsk[i]); 
     }
     printf("\n");
 
@@ -77,7 +59,7 @@ int main(int argc, char *argv[]){
     char resourceAsk_string[50];
     together = malloc(strlen(resourceAsk_string)*10 + 1 + 1);
     
-
+    //Add random number of resources to one string
     for(i=0;i<10;i++){
         snprintf(resourceAsk_string, sizeof(resourceAsk_string), "%i", resourceAsk[i]); //convert integer to char string 
         if(i == 0){
@@ -88,10 +70,10 @@ int main(int argc, char *argv[]){
         if(i < 9){
             strcat(together, " ");
         }
-         printf("added %s String is now %s\n", resourceAsk_string, together);
+         printf("added %s String is now %s\n", resourceAsk_string, together); //TESTING
     }
 
-    printf("These are your resources in one string format: %s\n", together); //testing
+    printf("These are your resources in one string format: %s\n", together); //TESTING
 
     //copy our new string into mtext
     strcpy(buf.strData, together);
@@ -101,72 +83,9 @@ int main(int argc, char *argv[]){
     buf.mtype = (long)getppid();
 
     //send our string to message queue
-    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){
-        perror("msgsnd to child 1 failed\n");
-        exit(1);
-    }
+    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
 
     printf("sent message %s\n", together);
-
-    return 0;
-
-//--------------------------------------------------------------------------------------------------//
-
-//     int termTimeS;
-//     int termTimeNano;
-//     int sysClockS;
-//     int sysClockNano;
-//     int checkSec = 0;
-
-//     // initialization for string loop
-//     int seperate = 0;
-//     int sec;
-//     int nanosec;
-
-
-
-//     //attatch memory we allocated to our process and point pointer to it 
-//     double *shm_ptr = (double*) (shmat(shm_id, 0, 0));
-//     if (shm_ptr <= 0) {
-//         fprintf(stderr,"Child Shared memory attach failed\n");
-//         exit(1);
-//     }
-
-//     //read time from memory
-//     double readFromMem;
-//     readFromMem = *shm_ptr;
-
-//     //Figure out when to terminate
-//     termTimeS = readFromMem.sec + sec;
-//     termTimeNano = readFromMem.nano + nanosec;
-
-//     //Read time from memory
-//     sysClockS = readFromMem.sec;
-//     sysClockNano = readFromMem.nano;
-
-//     //for printing every second in the loop for each child that starts at different times
-//     checkSec = sysClockS;
-
-//     printf("WORKER PID: %ld PPID: %ld Received message from oss: SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n--Received message\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
-
-//     //loop child until termination time is passed 
-//     while(1){
-//         readFromMem = *shm_ptr;
-//         sysClockS = readFromMem.sec;
-//         sysClockNano = readFromMem.nano;
-
-//         //to terminate at the right time
-//         if(sysClockS > termTimeS || (sysClockS == termTimeS && sysClockNano > termTimeNano)){
-//             break;
-//         }
-//         //printins out every second
-//         if(checkSec == sysClockS){
-//             printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --%i seconds has passed\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano, checkSec);
-//             checkSec++;
-//         }
-//     }
-//     //print when child has finished loop and terminating
-//     printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --Terminating\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
 
     return 0;
 }
