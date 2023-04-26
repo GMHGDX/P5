@@ -85,7 +85,21 @@ int main(int argc, char *argv[]){
         }
     }
 
-    printResourceTable(resourceTable); //print resource table
+    //Create resource header
+    printf("\t");
+    for(i=0;i<10;i++){
+        printf("R%i\t", i);
+    }
+    printf("\n");
+
+    //Print resource table and max processes on the side
+    for(i = 0; i < 18; i++){
+        printf("P%i\t", i);
+        for(j = 0; j < 10; j++){
+            printf("%i\t", resourceTable[i][j]);
+        }
+        printf("\n");
+    }
     
     fileLogging = fopen(logFile, "w+"); //Open the log file before input begins 
 
@@ -216,7 +230,21 @@ int main(int argc, char *argv[]){
                 resourceTable[simpidofsender][i] = reasourcesUsed[i];
             }
 
-            printResourceTable(resourceTable);
+            //Create resource header
+            printf("\t");
+            for(i=0;i<10;i++){
+                printf("R%i\t", i);
+            }
+            printf("\n");
+
+            //Print resource table and max processes on the side
+            for(i = 0; i < 18; i++){
+                printf("P%i\t", i);
+                for(j = 0; j < 10; j++){
+                    printf("%i\t", resourceTable[i][j]);
+                }
+                printf("\n");
+            }
             
         }else{
             printf("No message received\n");
@@ -239,22 +267,4 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-void printResourcetable(int resourceTable[][10]){
-    int i, j;
-    //Create resource header
-    printf("\t");
-    for(i=0;i<10;i++){
-        printf("R%i\t", i);
-    }
-    printf("\n");
 
-    //Print resource table and max processes on the side
-    for(i = 0; i < 18; i++){
-        printf("P%i\t", i);
-        for(j = 0; j < 10; j++){
-            printf("%i\t", resourceTable[i][j]);
-        }
-        printf("\n");
-    }
-    return;
-}
