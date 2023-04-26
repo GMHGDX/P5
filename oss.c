@@ -129,6 +129,7 @@ int main(int argc, char *argv[]){
     int milliSec = 0; //milliseconds used in time limit
     int reasourcesUsed[10]; //resources in an array
     char* text; //used to seperate message recieved by whitespace 
+    int simpidofsender;
 
     //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
@@ -195,23 +196,51 @@ int main(int argc, char *argv[]){
 
         wait(0); //wait for child to finish in user_proc
 
+        buf.intData = 0;
         // receive a message from user_proc, but only one for our PID
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+        if(buf.intData != 0){
+            printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
 
-        printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
-
-        text = strtok(buf.strData, " ");
-        for (i=0;i<10;i++){
-            if(text == NULL){
-                break;
+            text = strtok(buf.strData, " ");
+            for (i=0;i<10;i++){
+                if(text == NULL){
+                    break;
+                }
+                reasourcesUsed[i] = atoi(text);
+                text = strtok(NULL, " ");
             }
-            reasourcesUsed[i] = atoi(text);
-            text = strtok(NULL, " ");
-        }
-        
-        printf("We parsed out:"); //TESTING
-        for (i=0;i<10;i++){
-            printf(" %i", reasourcesUsed[i]);
+            
+            // printf("We parsed out:"); //TESTING
+            // for (i=0;i<10;i++){
+            //     printf(" %i", reasourcesUsed[i]);
+            // }
+
+            i = 0;
+            while(i < 18){
+                if(mypidstruct[i].realpid == buf.intData){  //Will thius crash if mypidstruct[i].realpid is not set to anything (unitalized)
+                    simpidofsender = mypidstruct[i].simpid;
+                    break;
+                }
+                i++;
+            }
+
+            printf("the simulated pid of the sender is: %i\n", simpidofsender);
+
+            for (i=0;i<10;i++){
+            resourceTable[simpidofsender][i] = reasourcesUsed[i];
+            }
+
+            //Print resource table and max processes on the side
+            for(i = 0; i < 18; i++){
+                printf("P%i\t", i);
+                for(j = 0; j < 10; j++){
+                    printf("%i\t", resourceTable[i][j]);
+                }
+                printf("\n");
+            }
+        }else{
+            printf("No message received\n");
         }
 
         if(numofchild > 0){ //TESTING
