@@ -25,8 +25,16 @@
 
 void printTable();
 
+typedef struct pidstruct {
+    pid_t realpid;
+    int simpid;
+} pidstruct;
+
+
 
 int main(int argc, char *argv[]){
+    pidstruct mypidstruct[50];
+
     char* logFile = "logfile"; //logfile declaration
     FILE *fileLogging; //for the file 
     pid_t childpid = 0; //child process ID 
@@ -119,6 +127,9 @@ int main(int argc, char *argv[]){
     int numofchild = 0; //DELETEEEEEEEEE
     char msgForChild[10]; //char 0for converting int sent to user_proc
     int milliSec = 0; //milliseconds used in time limit
+    int seperate = 0; //seperate message recieved by whitespace 
+    int reasourcesUsed[10];
+    char* text;
 
     //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
@@ -167,6 +178,9 @@ int main(int argc, char *argv[]){
                 return 1;
             }
             if(childpid != 0 ){ 
+                mypidstruct[numofchild].realpid = childpid;
+                mypidstruct[numofchild].simpid = numofchild;
+
                 buf.mtype = childpid; //initialize mtype to the child's pid
                 buf.intData = childpid; //we will give it the pid we are sending to, so we know it received it
 
@@ -180,12 +194,26 @@ int main(int argc, char *argv[]){
             }
         }
 
-        // receive a message from user_proc, but only one for our PID
-        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }
-        
-        printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
-    
         wait(0); //wait for child to finish in user_proc
+
+        // receive a message from user_proc, but only one for our PID
+        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+
+        printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
+
+        text = strtok(buf.strData, " ");
+        for (i=0;i<10;i++){
+            if(text == NULL){
+                break;
+            }
+            reasourcesUsed[i] = atoi(text);
+            text = strtok(NULL, " ");
+        }
+        
+        printf("We parsed out:"); //TESTING
+        for (i=0;i<10;i++){
+            printf(" %i", reasourcesUsed[i]);
+        }
 
         if(numofchild > 0){ //TESTING
             break;
