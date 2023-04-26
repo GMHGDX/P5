@@ -87,21 +87,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-    //Create resource header
-    printf("\t");
-    for(i=0;i<10;i++){
-        printf("R%i\t", i);
-    }
-    printf("\n");
-
-    //Print resource table and max processes on the side
-    for(i = 0; i < 18; i++){
-        printf("P%i\t", i);
-        for(j = 0; j < 10; j++){
-            printf("%i\t", resourceTable[i][j]);
-        }
-        printf("\n");
-    }
+    printResourceTable(resourceTable); //print resource table
     
     fileLogging = fopen(logFile, "w+"); //Open the log file before input begins 
 
@@ -179,7 +165,7 @@ int main(int argc, char *argv[]){
             }
             if(childpid != 0 ){ 
                 mypidstruct[numofchild].realpid = childpid;
-                mypidstruct[numofchild].simpid = numofchild;
+                mypidstruct[numofchild].simpid = numofchild-1;
 
                 buf.mtype = childpid; //initialize mtype to the child's pid
                 buf.intData = childpid; //we will give it the pid we are sending to, so we know it received it
@@ -227,18 +213,13 @@ int main(int argc, char *argv[]){
 
             printf("the simulated pid of the sender is: %i\n", simpidofsender);
 
+            //Update resource table with new values
             for (i=0;i<10;i++){
-            resourceTable[simpidofsender][i] = reasourcesUsed[i];
+                resourceTable[simpidofsender][i] = reasourcesUsed[i];
             }
 
-            //Print resource table and max processes on the side
-            for(i = 0; i < 18; i++){
-                printf("P%i\t", i);
-                for(j = 0; j < 10; j++){
-                    printf("%i\t", resourceTable[i][j]);
-                }
-                printf("\n");
-            }
+            printResourceTable(resourceTable);
+            
         }else{
             printf("No message received\n");
         }
@@ -258,4 +239,22 @@ int main(int argc, char *argv[]){
     fclose(fileLogging); //close the log file
 
     return 0;
+}
+
+void printResourcetable(int resourceTable[]){
+    //Create resource header
+    printf("\t");
+    for(i=0;i<10;i++){
+        printf("R%i\t", i);
+    }
+    printf("\n");
+
+    //Print resource table and max processes on the side
+    for(i = 0; i < 18; i++){
+        printf("P%i\t", i);
+        for(j = 0; j < 10; j++){
+            printf("%i\t", resourceTable[i][j]);
+        }
+        printf("\n");
+    }
 }
