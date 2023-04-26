@@ -23,24 +23,7 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
-void printResourcetable(int resourceTable[][10]){
-    int i, j;
-    //Create resource header
-    printf("\t");
-    for(i=0;i<10;i++){
-        printf("R%i\t", i);
-    }
-    printf("\n");
-
-    //Print resource table and max processes on the side
-    for(i = 0; i < 18; i++){
-        printf("P%i\t", i);
-        for(j = 0; j < 10; j++){
-            printf("%i\t", resourceTable[i][j]);
-        }
-        printf("\n");
-    }
-}
+void printResourcetable(int resourceTable[][10]);
 
 typedef struct pidstruct {
     pid_t realpid;
@@ -256,4 +239,22 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
+void printResourcetable(int resourceTable[][10]){
+    int i, j;
+    //Create resource header
+    printf("\t");
+    for(i=0;i<10;i++){
+        printf("R%i\t", i);
+    }
+    printf("\n");
 
+    //Print resource table and max processes on the side
+    for(i = 0; i < 18; i++){
+        printf("P%i\t", i);
+        for(j = 0; j < 10; j++){
+            printf("%i\t", resourceTable[i][j]);
+        }
+        printf("\n");
+    }
+    return;
+}
