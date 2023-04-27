@@ -265,6 +265,11 @@ int main(int argc, char *argv[]){
                     notenoughresources = true;
                 }
             }
+            printf("resources left after performing a check are:");
+            for(i=0;i<10;i++){
+                printf(" %i", resourcesLeft);
+            }
+            printf("\n");
 
             if(!notenoughresources){
                 //send message back to child that there are enough resources
@@ -279,6 +284,11 @@ int main(int argc, char *argv[]){
                     resourceTable[simpidofsender][i] = resourcesUsed[i];
                     resourcesLeft[i] -= resourcesUsed[i];
                 }
+                printf("resources left after updating table:");
+                for(i=0;i<10;i++){
+                    printf(" %i", resourcesLeft);
+                }
+                printf("\n");
 
                 //Create resource header
                 printf("\t");
