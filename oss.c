@@ -196,12 +196,14 @@ int main(int argc, char *argv[]){
             }
         }
 
-        printf("parent got here  _________________________________________");
+        printf("parent got here  _________________________________________\n");
 
 
         buf.intData = 0;
         strcpy(buf.strData, "-1"); //Clear the message string back to nothing before we check for a msgrcv
         checkWhatToDo = -1; //Return checkwaht todo back to "do nothing"
+
+        printf("parent got here 2 _________________________________________\n");
 
         // receive a message from user_proc, but only one for our PID
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
