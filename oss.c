@@ -44,7 +44,7 @@ bool isFull() { return itemCount == MAX; }
 
 int size() { return itemCount; }  
 
-void insert(blockedQueue data) {
+void insert(queue data) {
    if(!isFull()) {
       if(rear == MAX-1) {
         rear = -1;            
