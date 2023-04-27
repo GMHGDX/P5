@@ -167,7 +167,8 @@ int main(int argc, char *argv[]){
 
         printf("wrote to mem: %lf\n", currentTime); //TESTING
     
-        if(limitReach <= currentTime){ //fork child if current time is more than random time to fork child
+        //if(limitReach <= currentTime){ //fork child if current time is more than random time to fork child
+        if(numofchild<1){   //For testing
             numofchild++;
            
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
@@ -208,6 +209,7 @@ int main(int argc, char *argv[]){
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
+            printf("dealloacting");
             break;//end porgram
         }
         if(checkWhatToDo > 0){
@@ -280,9 +282,9 @@ int main(int argc, char *argv[]){
             printf("No message received\n");
         }
 
-        if(numofchild > 0){ //TESTING
-            break;
-        }
+        // if(numofchild > 0){ //TESTING
+        //     break;
+        // }
     }  
 
     printf("waiting for the child to end its own life >:)");
