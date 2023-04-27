@@ -48,9 +48,12 @@ void insert(queue data) {
    if(!isFull()) {
       if(rear == MAX-1) {
         rear = -1;            
-      }       
+      }
+      int i;
+      for(i=0;i<10;i++){
+        blockedQueue[++rear].resources[i] = data.resources[i];
+      }
       blockedQueue[++rear].pid = data.pid;
-      blockedQueue[++rear].resources = data.resources;
       itemCount++;
    }
 }
