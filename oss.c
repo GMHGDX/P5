@@ -201,9 +201,10 @@ int main(int argc, char *argv[]){
         buf.intData = 0;
         strcpy(buf.strData, "-1"); //Clear the message string back to nothing before we check for a msgrcv
         checkWhatToDo = -1; //Return checkwaht todo back to "do nothing"
+        
         // receive a message from user_proc, but only one for our PID
-        //if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
-        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }  //Fopr testing only, will wait for child to send its message
+        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+        //if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }  //Fopr testing only, will wait for child to send its message
         checkWhatToDo = atoi(buf.strData);  //If 0, means a process has died, if greater than 0, meana we got some reacourses to alloacte
         printf("Check waht to do is: %i\n", checkWhatToDo);
 
