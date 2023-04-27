@@ -401,6 +401,7 @@ int main(int argc, char *argv[]){
         //     prtinf("still cant get the guy out from bloeck queue");
         // }
 
+        printf("checking if its time to end");
         //Check if we should terminate porgram
         for(i=0;i<10;i++){
             if(resourcesLeft[i] != 20){
