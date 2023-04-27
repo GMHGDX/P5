@@ -77,14 +77,14 @@ int main(int argc, char *argv[]){
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
     printf("CHILD: sent message %s\n", together); //TESTING
 
-    if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
+    if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("1 failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
     printf("CHILD: Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
     int checkResponse = atoi(buf.strData);
 
     printf("CHILD: recieved checkresponse %i from parent", checkResponse);
     
     while(checkResponse != 1){
-        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("2 failed to receive message from parent\n"); exit(1); }
         checkResponse = atoi(buf.strData);
     }
     sleep(1);
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]){
     strcpy(buf.strData, "0");
     buf.intData = getpid();
     buf.mtype = (long)getppid();
-    
+
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
     printf("CHILD: sent my last message o7 farewell cruel; world\n");
 
