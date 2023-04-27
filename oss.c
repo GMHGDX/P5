@@ -206,9 +206,6 @@ int main(int argc, char *argv[]){
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
-            printf("dealloacting, here is buf.intData - %i\n", buf.intData);
-            printf("real PID: %i", childpid);
-
             i = 0;
             while(i < 18){
                 if(mypidstruct[i].realpid == buf.intData){  //Will this crash if mypidstruct[i].realpid is not set to anything (unitalized)
@@ -220,7 +217,7 @@ int main(int argc, char *argv[]){
             //Update resource table with new values
             for (i=0;i<10;i++){
                 resourceTable[simpidofsender][i] = resourcesUsed[i];
-                resourcesLeft[i] += resourcesUsed[i];
+                resourcesUsed[i] += resourcesLeft[i];
             }
 
             break; //end program
