@@ -45,13 +45,10 @@ bool isFull() { return itemCount == MAX; }
 int size() { return itemCount; }  
 
 void insert(blockedQueue data) {
-
    if(!isFull()) {
-	
       if(rear == MAX-1) {
-         rear = -1;            
+        rear = -1;            
       }       
-
       blockedQueue[++rear].pid = data.pid;
       blockedQueue[++rear].resources = data.resources;
       itemCount++;
@@ -60,11 +57,9 @@ void insert(blockedQueue data) {
 
 queue removeData() {
    queue data = blockedQueue[front++];
-	
    if(front == MAX) {
       front = 0;
    }
-	
    itemCount--;
    return data;  
 }
@@ -82,12 +77,12 @@ int main(int argc, char *argv[]){
 
     queue toInsert;
     toInsert.pid = 1001;
-    for(i=0;i++;i<10){
+    for(i=0;i<10;i++){
         toInsert.resources[i] = 5;
     }
     insert(toInsert);
     toInsert.pid = 2002;
-    for(i=0;i++;i<10){
+    for(i=0;i<10;i++){
         toInsert.resources[i] = 10;
     }
     insert(toInsert);
@@ -95,7 +90,7 @@ int main(int argc, char *argv[]){
     removeData();
     toInsert = peek();
     printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
-    for(i=0;i++;i<10){
+    for(i=0;i<10;i++){
         printf(" %i", toInsert.resources[i]);
     }
     printf("\n");
