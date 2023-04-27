@@ -205,9 +205,6 @@ int main(int argc, char *argv[]){
                 }
                 mypidstruct[i].simpid = i;
                 mypidstruct[i].realpid = childpid;
-                // mypidstruct[numofchild].realpid = childpid;
-                // mypidstruct[numofchild].simpid = numofchild-1;  //Cannot go over 18, should reuse old simpid's to account for this
-
             }
         }
 
@@ -329,6 +326,21 @@ int main(int argc, char *argv[]){
         }
         printf("\n");
     }
+
+    printf("RescouresLeft:");
+    for(i=0;i<10;i++){
+        printf(" %i", resourcesLeft[i]);
+    }
+
+    printf("MyPidStruct:\n");
+    for(i=0;i<20;i++){
+        printf("1:  realid: %i, simid: %i\t\t", mypidstruct[i].realpid, mypidstruct[i].simpid);
+    }
+
+
+    
+    //printf("blockedQueue:");
+
 
     ///printf("deleting memory");
     shmdt( shm_ptr ); // Detach from the shared memory segment
