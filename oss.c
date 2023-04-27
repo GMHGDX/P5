@@ -167,7 +167,7 @@ int main(int argc, char *argv[]){
         //printf("wrote to mem: %lf\n", currentTime); //TESTING
     
         //if(limitReach <= currentTime){ //fork child if current time is more than random time to fork child
-        if(numofchild<1){   //For testing
+        if(numofchild<1){   //For testing //add parameter for 40 children and more than 5 real seconds
             numofchild++;
            
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
@@ -196,25 +196,33 @@ int main(int argc, char *argv[]){
             }
         }
 
-
-
-
         buf.intData = 0;
         strcpy(buf.strData, "-1"); //Clear the message string back to nothing before we check for a msgrcv
         checkWhatToDo = -1; //Return checkwaht todo back to "do nothing"
 
-
-
         // receive a message from user_proc, but only one for our PID
         msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT);
-        //if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }  //Fopr testing only, will wait for child to send its message
         checkWhatToDo = atoi(buf.strData);  //If 0, means a process has died, if greater than 0, meana we got some reacourses to alloacte
-        //printf("Check waht to do is: %i\n", checkWhatToDo);
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
             printf("dealloacting\n");
-            break;//end porgram
+
+            i = 0;
+            while(i < 18){
+                if(mypidstruct[i].realpid == buf.intData){  //Will thius crash if mypidstruct[i].realpid is not set to anything (unitalized)
+                    simpidofsender = mypidstruct[i].simpid;
+                    break;
+                }
+                i++;
+            }
+            //Update resource table with new values
+            for (i=0;i<10;i++){
+                resourceTable[simpidofsender][i] = resourcesUsed[i];
+                resourcesLeft[i] += resourcesUsed[i];
+            }
+
+            break; //end program
         }
         if(checkWhatToDo > 0){
             printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
@@ -293,6 +301,22 @@ int main(int argc, char *argv[]){
 
     printf("waiting for the child to end its own life\n");
     wait(0); //wait for child to finish in user_proc
+
+    //Create resource header
+    printf("\t");
+    for(i=0;i<10;i++){
+        printf("R%i\t", i);
+    }
+    printf("\n");
+
+    //Print resource table and max processes on the side
+    for(i = 0; i < 18; i++){
+        printf("P%i\t", i);
+        for(j = 0; j < 10; j++){
+            printf("%i\t", resourceTable[i][j]);
+        }
+        printf("\n");
+    }
 
     ///printf("deleting memory");
     shmdt( shm_ptr ); // Detach from the shared memory segment
