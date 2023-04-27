@@ -142,6 +142,7 @@ int main(int argc, char *argv[]){
     char* text; //used to seperate message recieved by whitespace 
     int simpidofsender;
     bool notenoughresources = false;
+    int checkWhatToDo = -1;
 
     //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
@@ -192,26 +193,24 @@ int main(int argc, char *argv[]){
             if(childpid != 0 ){ 
                 mypidstruct[numofchild].realpid = childpid;
                 mypidstruct[numofchild].simpid = numofchild-1;
-
-                // buf.mtype = childpid; //initialize mtype to the child's pid
-                // buf.intData = childpid; //we will give it the pid we are sending to, so we know it received it
-
-                // snprintf(msgForChild, sizeof(msgForChild), "%i", childpid); //convert int message to string
-                // printf("Sending message to child: %s with pid %d \n", msgForChild, childpid); //TESTING
-
-                // strcpy(buf.strData, msgForChild); //copy msg contents into the buffer
-                
-                // //send message to user_proc
-                // if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
             }
         }
 
 
         buf.intData = 0;
+        strcpy(buf.strData, "-1"); //Clear the message string back to nothing before we check for a msgrcv
+        checkWhatToDo = -1; //Return checkwaht todo back to "do nothing"
         // receive a message from user_proc, but only one for our PID
         //if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }  //Fopr testing only, will wait for child to send its message
-        if(buf.intData != 0){
+        checkWhatToDo = atoi(buf.strData);  //If 0, means a process has died, if greater than 0, meana we got some reacourses to alloacte
+        printf("Check waht to do is: %i\n", checkWhatToDo);
+
+        if(checkWhatToDo == 0){
+            //de allocate ur shit
+            break;//end porgram
+        }
+        if(checkWhatToDo > 0){
             printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
 
             text = strtok(buf.strData, " ");

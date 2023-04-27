@@ -11,6 +11,7 @@ int main(int argc, char *argv[]){
     buf.mtype = 1;
     int msqid = 0;
     key_t msqkey;
+    bool blocked = true;
 
     int resourceLim = 20;
     int resourceAsk[10];
@@ -37,8 +38,7 @@ int main(int argc, char *argv[]){
     //message queue
     if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //get message queue key used in oss
     if ((msqid = msgget(msqkey, PERMS)) == -1) { perror("msgget in child"); exit(1); } //access oss message queue
-    // if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
-
+  
     printf("Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
 
     //Create a random number for how many instances of each resource the process wants and add it to an array
@@ -88,5 +88,14 @@ int main(int argc, char *argv[]){
 
     if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
     printf("Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
+    
+    while(buf.strData != "1"){
+        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+    }
+    sleep(1);
+
+    //send our string to message queue
+    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
+    
     return 0;
 }
