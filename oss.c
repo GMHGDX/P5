@@ -206,11 +206,11 @@ int main(int argc, char *argv[]){
             }
         }
 
-        wait(0); //wait for child to finish in user_proc
 
         buf.intData = 0;
         // receive a message from user_proc, but only one for our PID
-        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+        //if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }  //Fopr testing only, will wait for child to send its message
         if(buf.intData != 0){
             printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
 
@@ -285,6 +285,9 @@ int main(int argc, char *argv[]){
             break;
         }
     }  
+
+    printf("waiting for the child to end its own life >:)");
+    wait(0); //wait for child to finish in user_proc
 
     ///printf("deleting memory");
     shmdt( shm_ptr ); // Detach from the shared memory segment
