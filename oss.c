@@ -79,40 +79,7 @@ int main(int argc, char *argv[]){
     int i;
     int j;
 
-    queue toInsert;
-    toInsert.pid = 1001;
-    for(i=0;i<10;i++){
-        toInsert.resources[i] = 5;
-    }
-    insert(toInsert);
-
-
-    toInsert.pid = 2002;
-    for(i=0;i<10;i++){
-        toInsert.resources[i] = 10;
-    }
-    insert(toInsert);
-
-    toInsert = peek();
-    printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
-    for(i=0;i<10;i++){
-        printf(" %i", toInsert.resources[i]);
-    }
-    printf("\n");
-
-    removeData();
-
-    toInsert = peek();
-    printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
-    for(i=0;i<10;i++){
-        printf(" %i", toInsert.resources[i]);
-    }
-    printf("\n");
-    return 0;
-
-
-
-
+    queue toInsert; //insert numbers to blocked queue struct
     char* logFile = "logfile"; //logfile declaration
     FILE *fileLogging; //for the file 
     pid_t childpid = 0; //child process ID 
@@ -368,12 +335,28 @@ int main(int argc, char *argv[]){
             }else{  //If notenough is true
                 //send to blocked queue, should hold the pid of the process that is blocked and the rescoruces it is reuqesating, first in first out
                 printf("Not enough resources! Get blocked! \n");
+                toInsert.pid = buf.intData;
+                for(i=0;i<10;i++){
+                    toInsert.resources[i] = resourcesUsed[i];
+                }
+                insert(toInsert);
 
-
+                //TESTING
+                toInsert = peek();
+                printf("Test: looking at front of blocekd queue pid = %i\n Resources are:", toInsert.pid);
+                for(i=0;i<10;i++){
+                    printf(" %i", toInsert.resources[i]);
+                }
+                printf("\n");
             }
 
             notenoughresources = false;     
         }
+
+        // check the blocekd queue
+        // if we ahve enough sapce for oneone in blocekd 
+        // sewndmessaegto = queueremoveData();
+        // update the resource table
 
         //end of loop
     }  
