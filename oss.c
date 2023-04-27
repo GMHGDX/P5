@@ -167,6 +167,12 @@ int main(int argc, char *argv[]){
         //printf("wrote to mem: %lf\n", currentTime); //TESTING
     
         //if(limitReach <= currentTime){ //fork child if current time is more than random time to fork child
+
+        //  i = 0;  //Finds the smallest positoin to put the new child into (cannot be over 17 or it will break our code)
+        //  while(mypidstruct[i].simpid != 0){
+        //       i++;
+        //  }
+        // if(limitReach <= currentTime && numofchild < 40 && currentTime <= 5 && i < 17) // if its time to create a child (limitReach <= currentTime), and we ahve less then 40 children, and 5 seconds have not passsed, and we have sapce for 1 more child (i < 17)
         if(numofchild<1){   //For testing //add parameter for 40 children and more than 5 real seconds
             numofchild++;
            
@@ -190,9 +196,19 @@ int main(int argc, char *argv[]){
 
                 return 1;
             }
-            if(childpid != 0 ){ 
-                mypidstruct[numofchild].realpid = childpid;
-                mypidstruct[numofchild].simpid = numofchild-1;
+            if(childpid != 0 ){               
+                i = 0;  //Finds the smallest positoin to put the new child into (cannot be over 17 or it will break our code)
+                while(mypidstruct[i].simpid != 0){
+                    i++;
+                }
+                if(i>17){
+                    printf("fuck i broke the code");
+                }
+                mypidstruct[i] = i;
+                mypidstruct[i].realpid = childpid;
+                // mypidstruct[numofchild].realpid = childpid;
+                // mypidstruct[numofchild].simpid = numofchild-1;  //Cannot go over 18, should reuse old simpid's to account for this
+
             }
         }
 
@@ -210,29 +226,19 @@ int main(int argc, char *argv[]){
             while(i < 18){
                 if(mypidstruct[i].realpid == buf.intData){  //Will this crash if mypidstruct[i].realpid is not set to anything (unitalized)
                     simpidofsender = mypidstruct[i].simpid;
+
+                    mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
+                    mypidstruct[i].simpid = 0;
                     break;
                 }
                 i++;
             }
-            printf("sim pid is: %i \n", simpidofsender);
-
-            printf("resources left are:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft[i]);
-            }
-            printf("\n");
 
             //Update resource table with new values
             for (i=0;i<10;i++){
                 resourcesLeft[i] += resourceTable[simpidofsender][i];
                 resourceTable[simpidofsender][i] = 0;
             }
-
-            printf("resources left after removal is now:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft[i]);
-            }
-            printf("\n");
 
             break; //end program
         }
@@ -265,16 +271,10 @@ int main(int argc, char *argv[]){
                     notenoughresources = true;
                 }
             }
-            printf("resources left after performing a check are:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft[i]);
-            }
-            printf("\n");
 
             if(!notenoughresources){
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
-                //buf.strData = "1";
                 buf.mtype = buf.intData;
                 printf("OSS is sending that it has available resources--> message: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
                 if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
@@ -284,11 +284,6 @@ int main(int argc, char *argv[]){
                     resourceTable[simpidofsender][i] = resourcesUsed[i];
                     resourcesLeft[i] -= resourcesUsed[i];
                 }
-                printf("resources left after updating table:");
-                for(i=0;i<10;i++){
-                    printf(" %i", resourcesLeft[i]);
-                }
-                printf("\n");
 
                 //Create resource header
                 printf("\t");
@@ -312,13 +307,9 @@ int main(int argc, char *argv[]){
             }
 
             notenoughresources = false;     
-        }else{
-            //printf("No message received\n");
         }
 
-        // if(numofchild > 0){ //TESTING
-        //     break;
-        // }
+        //end of loop
     }  
 
     printf("waiting for the child to end its own life\n");
