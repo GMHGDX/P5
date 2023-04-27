@@ -155,11 +155,6 @@ int main(int argc, char *argv[]){
             return (EXIT_FAILURE);
         }
     }
-    
-    //Initialize blocked queue
-    for(i = 0; i < 50; i++){
-        blockedQueue[i] = 0;
-    }
 
     //Initialize empty resources left (all zeros)
     for(i = 0; i < 10; i++){
