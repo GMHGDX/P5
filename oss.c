@@ -218,7 +218,7 @@ int main(int argc, char *argv[]){
 
             printf("resources left are:");
             for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft);
+                printf(" %i", resourcesLeft[i]);
             }
             printf("\n");
 
@@ -230,7 +230,7 @@ int main(int argc, char *argv[]){
 
             printf("resources left after removal is now:");
             for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft);
+                printf(" %i", resourcesLeft[i]);
             }
             printf("\n");
 
@@ -267,7 +267,7 @@ int main(int argc, char *argv[]){
             }
             printf("resources left after performing a check are:");
             for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft);
+                printf(" %i", resourcesLeft[i]);
             }
             printf("\n");
 
@@ -286,7 +286,7 @@ int main(int argc, char *argv[]){
                 }
                 printf("resources left after updating table:");
                 for(i=0;i<10;i++){
-                    printf(" %i", resourcesLeft);
+                    printf(" %i", resourcesLeft[i]);
                 }
                 printf("\n");
 
