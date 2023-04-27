@@ -91,7 +91,7 @@ int main(int argc, char *argv[]){
     
     while(checkResponse != 1){
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }
-        checkResponse = atoi(buf.strData)
+        checkResponse = atoi(buf.strData);
     }
     sleep(1);
 
