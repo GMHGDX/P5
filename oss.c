@@ -214,7 +214,7 @@ int main(int argc, char *argv[]){
                 }
                 i++;
             }
-            print("sim pid is: %i \n", simpidofsender);
+            printf("sim pid is: %i \n", simpidofsender);
 
             printf("resources left are:");
             for(i=0;i<10;i++){
