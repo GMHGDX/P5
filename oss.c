@@ -213,7 +213,7 @@ int main(int argc, char *argv[]){
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
-            printf("dealloacting");
+            printf("dealloacting\n");
             break;//end porgram
         }
         if(checkWhatToDo > 0){
@@ -291,7 +291,7 @@ int main(int argc, char *argv[]){
         // }
     }  
 
-    printf("waiting for the child to end its own life >:)");
+    printf("waiting for the child to end its own life\n");
     wait(0); //wait for child to finish in user_proc
 
     ///printf("deleting memory");
