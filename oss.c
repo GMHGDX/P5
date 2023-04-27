@@ -331,13 +331,13 @@ int main(int argc, char *argv[]){
     for(i=0;i<10;i++){
         printf(" %i", resourcesLeft[i]);
     }
-    printf("\n")
+    printf("\n");
 
     printf("MyPidStruct:\n");
     for(i=0;i<20;i++){
         printf("%i:  realid: %i, simid: %i\t\t", i, mypidstruct[i].realpid, mypidstruct[i].simpid);
     }
-    printf("\n")
+    printf("\n");
 
 
     
