@@ -193,16 +193,16 @@ int main(int argc, char *argv[]){
                 mypidstruct[numofchild].realpid = childpid;
                 mypidstruct[numofchild].simpid = numofchild-1;
 
-                buf.mtype = childpid; //initialize mtype to the child's pid
-                buf.intData = childpid; //we will give it the pid we are sending to, so we know it received it
+                // buf.mtype = childpid; //initialize mtype to the child's pid
+                // buf.intData = childpid; //we will give it the pid we are sending to, so we know it received it
 
-                snprintf(msgForChild, sizeof(msgForChild), "%i", childpid); //convert int message to string
-                printf("Sending message to child: %s with pid %d \n", msgForChild, childpid); //TESTING
+                // snprintf(msgForChild, sizeof(msgForChild), "%i", childpid); //convert int message to string
+                // printf("Sending message to child: %s with pid %d \n", msgForChild, childpid); //TESTING
 
-                strcpy(buf.strData, msgForChild); //copy msg contents into the buffer
+                // strcpy(buf.strData, msgForChild); //copy msg contents into the buffer
                 
-                //send message to user_proc
-                if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
+                // //send message to user_proc
+                // if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
             }
         }
 
