@@ -162,7 +162,7 @@ int main(int argc, char *argv[]){
         //Write the current time to memory for children to read
         writeToMem = currentTime;
         *shm_ptr = writeToMem;
-        
+
         //  i = 0;  //Finds the smallest positoin to put the new child into (cannot be over 17 or it will break our code)
         //  while(mypidstruct[i].simpid != 0){
         //       i++;
@@ -172,12 +172,12 @@ int main(int argc, char *argv[]){
             numofchild++;
            
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
-            printf("random milliSecond: %i\n", milliSec); //TESTING
+            //printf("random milliSecond: %i\n", milliSec); //TESTING
 
             limitReach = sec + (double)(milliSec/1000) + (double)(nano/BILLION); //combine sec, millisec, and nanosec as one decimal to get new time to fork process
 
-            printf("we are making a new process at: %lf\n", limitReach);  //TESTING
-            printf("sec is %lf, mili  is %lf, nano is %lf\n", sec, (double)(milliSec/1000), (double)(nano/BILLION)); // TESTING 
+            //printf("we are making a new process at: %lf\n", limitReach);  //TESTING
+            //printf("sec is %lf, mili  is %lf, nano is %lf\n", sec, (double)(milliSec/1000), (double)(nano/BILLION)); // TESTING 
 
             childpid = fork(); //fork child
 
@@ -329,18 +329,15 @@ int main(int argc, char *argv[]){
     }
     printf("\n");
 
-    printf("MyPidStruct:\n");
-    for(i=0;i<20;i++){
-        printf("%i:  realid: %i, simid: %i\t\t", i, mypidstruct[i].realpid, mypidstruct[i].simpid);
-    }
-    printf("\n");
+    // printf("MyPidStruct:\n");
+    // for(i=0;i<20;i++){
+    //     printf("%i:  realid: %i, simid: %i\n", i, mypidstruct[i].realpid, mypidstruct[i].simpid);
+    // }
+    // printf("\n");
 
-
-    
     //printf("blockedQueue:");
 
-
-    ///printf("deleting memory");
+    printf("deleting memory");
     shmdt( shm_ptr ); // Detach from the shared memory segment
     shmctl( shm_id, IPC_RMID, NULL ); // Free shared memory segment shm_id 
 

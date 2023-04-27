@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
     double readFromMem;
     readFromMem = *shm_ptr;
 
-    printf("\nCHILD: This is the number child read from memory: %lf", readFromMem);  //TESTING
+    printf("\nCHILD: This is the number child read from memory: %lf\n", readFromMem);  //TESTING
 
     //message queue
     if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //get message queue key used in oss
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-    printf("CHILD: These are your resources in one string format: %s\n", together); //TESTING
+    //printf("CHILD: These are your resources in one string format: %s\n", together); //TESTING
 
     //copy our new string into mtext
     strcpy(buf.strData, together);
