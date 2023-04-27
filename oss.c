@@ -166,7 +166,6 @@ int main(int argc, char *argv[]){
 
         //printf("wrote to mem: %lf\n", currentTime); //TESTING
     
-        //if(limitReach <= currentTime){ //fork child if current time is more than random time to fork child
 
         //  i = 0;  //Finds the smallest positoin to put the new child into (cannot be over 17 or it will break our code)
         //  while(mypidstruct[i].simpid != 0){
@@ -204,7 +203,7 @@ int main(int argc, char *argv[]){
                 if(i>17){
                     printf("fuck i broke the code");
                 }
-                mypidstruct[i] = i;
+                mypidstruct[i].simpid = i;
                 mypidstruct[i].realpid = childpid;
                 // mypidstruct[numofchild].realpid = childpid;
                 // mypidstruct[numofchild].simpid = numofchild-1;  //Cannot go over 18, should reuse old simpid's to account for this
