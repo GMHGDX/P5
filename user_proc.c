@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
     int resourceLim = 20;
     int resourceAsk[10];
 
-    srand(time(getpid())); //seed for random number generator
+    srand(time(0) + getpid()); //seed for random number generator
 
     //grab sh_key from oss for shared memory
     int sh_key = atoi(argv[1]);
