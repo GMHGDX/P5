@@ -83,6 +83,14 @@ int main(int argc, char *argv[]){
     for(i=0;i<10;i++){
         toInsert.resources[i] = 5;
     }
+    printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
+    for(i=0;i<10;i++){
+        printf(" %i", toInsert.resources[i]);
+    }
+    printf("\n");
+
+
+
     insert(toInsert);
     toInsert.pid = 2002;
     for(i=0;i<10;i++){
@@ -107,7 +115,6 @@ int main(int argc, char *argv[]){
     pid_t childpid = 0; //child process ID 
     int resourceTable[18][10]; //Initialize resource table
     int resourcesLeft[10];
-    int blockedQueue[50];
     pidstruct mypidstruct[50];
 
     srand(time(0)); //Seed the random number generator
