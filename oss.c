@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
 
     //Initialize empty resources left (all zeros)
     for(i = 0; i < 10; i++){
-        resourcesLeft[i] = 0;
+        resourcesLeft[i] = 20;
     }
 
     //Initialize empty resource table (all zeros)
@@ -275,7 +275,7 @@ int main(int argc, char *argv[]){
                 printf("Not enough resources! \n");
 
             }
-            
+
             notenoughresources = false;     
         }else{
             printf("No message received\n");
