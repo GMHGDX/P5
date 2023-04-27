@@ -23,6 +23,52 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
+//msgbuffer for message queue
+typedef struct queue {
+    int pid;
+    int resources[10];
+} queue;
+
+#define MAX 40
+
+queue blockedQueue[MAX];
+int front = 0;
+int rear = -1;
+int itemCount = 0;
+
+queue peek() { return blockedQueue[front]; }
+
+bool isEmpty() { return itemCount == 0; }
+
+bool isFull() { return itemCount == MAX; }
+
+int size() { return itemCount; }  
+
+void insert(blockedQueue data) {
+
+   if(!isFull()) {
+	
+      if(rear == MAX-1) {
+         rear = -1;            
+      }       
+
+      blockedQueue[++rear].pid = data.pid;
+      blockedQueue[++rear].resources = data.resources;
+      itemCount++;
+   }
+}
+
+queue removeData() {
+   queue data = blockedQueue[front++];
+	
+   if(front == MAX) {
+      front = 0;
+   }
+	
+   itemCount--;
+   return data;  
+}
+
 void printResourcetable(int resourceTable[][10]);
 
 typedef struct pidstruct {
@@ -33,6 +79,30 @@ typedef struct pidstruct {
 int main(int argc, char *argv[]){
     int i;
     int j;
+
+    queue toInsert;
+    toInsert.pid = 1001;
+    for(i=0;i++;i<10){
+        toInsert.resources[i] = 5;
+    }
+    insert(toInsert);
+    toInsert.pid = 2002;
+    for(i=0;i++;i<10){
+        toInsert.resources[i] = 10;
+    }
+    insert(toInsert);
+
+    removeData();
+    toInsert = peek();
+    printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
+    for(i=0;i++;i<10){
+        printf(" %i", toInsert.resources[i]);
+    }
+    printf("\n");
+    return 0;
+
+
+
 
     char* logFile = "logfile"; //logfile declaration
     FILE *fileLogging; //for the file 
@@ -294,7 +364,8 @@ int main(int argc, char *argv[]){
                 }
             }else{  //If notenough is true
                 //send to blocked queue, should hold the pid of the process that is blocked and the rescoruces it is reuqesating, first in first out
-                printf("Not enough resources! \n");
+                printf("Not enough resources! Get blocked! \n");
+
 
             }
 
@@ -348,5 +419,3 @@ int main(int argc, char *argv[]){
 
     return 0;
 }
-
-
