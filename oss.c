@@ -182,6 +182,7 @@ int main(int argc, char *argv[]){
     int simpidofsender;
     bool notenoughresources = false;
     int checkWhatToDo = -1;
+    bool allResourcesFree = false;
 
     //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
@@ -271,8 +272,7 @@ int main(int argc, char *argv[]){
                 resourcesLeft[i] += resourceTable[simpidofsender][i];
                 resourceTable[simpidofsender][i] = 0;
             }
-
-            break; //end program
+            
         }
         if(checkWhatToDo > 0){
             printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
@@ -305,6 +305,7 @@ int main(int argc, char *argv[]){
             }
 
             if(!notenoughresources){
+                notenoughresources = false;
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
                 buf.mtype = buf.intData;
@@ -348,15 +349,75 @@ int main(int argc, char *argv[]){
                     printf(" %i", toInsert.resources[i]);
                 }
                 printf("\n");
+            } 
+        }
+        //End of msgrcv
+
+
+        //Check if the front of the blocked queue has enough resoucres to be allowed to run
+        toInsert = peek();
+        for (i=0;i<10;i++){
+            resourcesUsed[i] = toInsert.resources[i];
+        }
+        //Check if we have enough resources for this process
+        for(i=0;i<10;i++){
+            if((resourcesLeft[i] - resourcesUsed[i]) < 0){
+                notenoughresources = true;
+            }
+        }
+        if(!notenoughresources){
+            notenoughresources = false;
+            removeData(); //Delete recourse from front of queue
+            //send message back to child that there are enough resources
+            strcpy(buf.strData, "1");
+            buf.mtype = toInsert.pid;
+            buf.intData = toInsert.pid;
+            printf("OSS is sending that it has available resources--> message: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
+            if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
+
+            //Update resource table with new values
+            for (i=0;i<10;i++){
+                resourceTable[simpidofsender][i] = resourcesUsed[i];
+                resourcesLeft[i] -= resourcesUsed[i];
             }
 
-            notenoughresources = false;     
+            //Create resource header
+            printf("\t");
+            for(i=0;i<10;i++){
+                printf("R%i\t", i);
+            }
+            printf("\n");
+
+            //Print resource table and max processes on the side
+            for(i = 0; i < 18; i++){
+                printf("P%i\t", i);
+                for(j = 0; j < 10; j++){
+                    printf("%i\t", resourceTable[i][j]);
+                }
+                printf("\n");
+            }
+        }
+        // else{
+        //     prtinf("still cant get the guy out from bloeck queue");
+        // }
+
+        //Check if we should terminate porgram
+        for(i=0;i<10;i++){
+            if(resourcesLeft[i] != 20){
+                allResourcesFree = false;
+                break; //Get out of this for loop, there are programs still using recources
+            }
+            if(i == 9 && resourcesLeft[i] == 20){
+                allResourcesFree = true;
+            }
         }
 
-        // check the blocekd queue
-        // if we ahve enough sapce for oneone in blocekd 
-        // sewndmessaegto = queueremoveData();
-        // update the resource table
+        if(allResourcesFree && isEmpty()){
+            break; //end program
+        }else{
+            allResourcesFree = false;
+        }
+        
 
         //end of loop
     }  
