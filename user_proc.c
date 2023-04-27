@@ -76,12 +76,13 @@ int main(int argc, char *argv[]){
     //send our string to message queue
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
     printf("CHILD: sent message %s\n", together); //TESTING
+    printf("CHILD: sent message %d\n", getpid()); //TESTING
 
     if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("1 failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
     printf("CHILD: Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
     int checkResponse = atoi(buf.strData);
 
-    printf("CHILD: recieved checkresponse %i from parent", checkResponse);
+    printf("CHILD: recieved checkresponse %i from parent\n", checkResponse);
     
     while(checkResponse != 1){
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("2 failed to receive message from parent\n"); exit(1); }
