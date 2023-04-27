@@ -145,7 +145,7 @@ int main(int argc, char *argv[]){
 
     //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
-        printf("num of children %i\n", numofchild); //TESTING
+        //printf("num of children %i\n", numofchild); //TESTING
 
         //stop simulated system clock and get seconds and nanoseconds
         if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) { perror( "clock gettime" ); return EXIT_FAILURE; }
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]){
         *shm_ptr = writeToMem;
         //writeToMem = *shm_ptr;//TESTING (reading from share memory)
 
-        printf("wrote to mem: %lf\n", currentTime); //TESTING
+        //printf("wrote to mem: %lf\n", currentTime); //TESTING
     
         //if(limitReach <= currentTime){ //fork child if current time is more than random time to fork child
         if(numofchild<1){   //For testing
@@ -196,14 +196,14 @@ int main(int argc, char *argv[]){
             }
         }
 
-        printf("parent got here  _________________________________________\n");
+
 
 
         buf.intData = 0;
         strcpy(buf.strData, "-1"); //Clear the message string back to nothing before we check for a msgrcv
         checkWhatToDo = -1; //Return checkwaht todo back to "do nothing"
 
-        printf("parent got here 2 _________________________________________\n");
+
 
         // receive a message from user_proc, but only one for our PID
         msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT);
