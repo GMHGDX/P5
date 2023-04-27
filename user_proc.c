@@ -97,6 +97,7 @@ int main(int argc, char *argv[]){
 
     //send our string to message queue
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
+    printf("sent my last message o7 farewell cruel; world");
 
     return 0;
 }
