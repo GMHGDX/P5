@@ -93,10 +93,15 @@ int main(int argc, char *argv[]){
     }
     insert(toInsert);
 
-    printf("front is %i\n", front);
+    toInsert = peek();
+    printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
+    for(i=0;i<10;i++){
+        printf(" %i", toInsert.resources[i]);
+    }
+    printf("\n");
 
     removeData();
-    printf("front is now %i", front);
+
     toInsert = peek();
     printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
     for(i=0;i<10;i++){
