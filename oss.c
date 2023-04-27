@@ -207,6 +207,7 @@ int main(int argc, char *argv[]){
         if(checkWhatToDo == 0){
             //de allocate ur shit
             printf("dealloacting, here is buf.intData - %i\n", buf.intData);
+            printf("real PID: %i", childpid);
 
             i = 0;
             while(i < 18){
