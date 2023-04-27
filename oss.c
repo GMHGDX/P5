@@ -206,7 +206,7 @@ int main(int argc, char *argv[]){
         printf("parent got here 2 _________________________________________\n");
 
         // receive a message from user_proc, but only one for our PID
-        if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT) == -1) { perror("failed to receive message from parent\n"); exit(1); }
+        msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT);
         //if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); }  //Fopr testing only, will wait for child to send its message
         checkWhatToDo = atoi(buf.strData);  //If 0, means a process has died, if greater than 0, meana we got some reacourses to alloacte
         printf("Check waht to do is: %i\n", checkWhatToDo);
