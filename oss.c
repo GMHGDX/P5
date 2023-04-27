@@ -214,11 +214,25 @@ int main(int argc, char *argv[]){
                 }
                 i++;
             }
+            print("sim pid is: %i \n", simpidofsender);
+
+            printf("resources left are:");
+            for(i=0;i<10;i++){
+                printf(" %i", resourcesLeft);
+            }
+            printf("\n");
+
             //Update resource table with new values
             for (i=0;i<10;i++){
-                resourceTable[simpidofsender][i] = resourcesUsed[i];
-                resourcesUsed[i] += resourcesLeft[i];
+                resourcesLeft[i] += resourceTable[simpidofsender][i];
+                resourceTable[simpidofsender][i] = 0;
             }
+
+            printf("resources left after removal is now:");
+            for(i=0;i<10;i++){
+                printf(" %i", resourcesLeft);
+            }
+            printf("\n");
 
             break; //end program
         }
@@ -264,7 +278,6 @@ int main(int argc, char *argv[]){
                 for (i=0;i<10;i++){
                     resourceTable[simpidofsender][i] = resourcesUsed[i];
                     resourcesLeft[i] -= resourcesUsed[i];
-                printf("ResourcesLeft: %i\n", resourcesLeft[i]);
                 }
 
                 //Create resource header
