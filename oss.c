@@ -51,9 +51,10 @@ void insert(queue data) {
       }
       int i;
       for(i=0;i<10;i++){
-        blockedQueue[++rear].resources[i] = data.resources[i];
+        blockedQueue[rear+1].resources[i] = data.resources[i];
       }
-      blockedQueue[++rear].pid = data.pid;
+      blockedQueue[rear+1].pid = data.pid;
+      rear++;
       itemCount++;
    }
 }
@@ -89,9 +90,20 @@ int main(int argc, char *argv[]){
     }
     printf("\n");
 
-
-
     insert(toInsert);
+    toInsert.pid = 2002;
+    for(i=0;i<10;i++){
+        toInsert.resources[i] = 10;
+    }
+    toInsert = peek();
+    printf("Toinsert pid = %i\n Reoucrses are: ", toInsert.pid);
+    for(i=0;i<10;i++){
+        printf(" %i", toInsert.resources[i]);
+    }
+    printf("\n");
+
+
+
     toInsert.pid = 2002;
     for(i=0;i<10;i++){
         toInsert.resources[i] = 10;
