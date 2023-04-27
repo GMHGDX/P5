@@ -417,7 +417,7 @@ int main(int argc, char *argv[]){
             }
         }
 
-        if(allResourcesFree && isEmpty()){
+        if(allResourcesFree && isEmpty() && numofchild>1){
             break; //end program
         }else{
             allResourcesFree = false;
