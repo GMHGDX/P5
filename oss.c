@@ -206,11 +206,11 @@ int main(int argc, char *argv[]){
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
-            printf("dealloacting\n");
+            printf("dealloacting, here is buf.intData - %i\n", buf.intData);
 
             i = 0;
             while(i < 18){
-                if(mypidstruct[i].realpid == buf.intData){  //Will thius crash if mypidstruct[i].realpid is not set to anything (unitalized)
+                if(mypidstruct[i].realpid == buf.intData){  //Will this crash if mypidstruct[i].realpid is not set to anything (unitalized)
                     simpidofsender = mypidstruct[i].simpid;
                     break;
                 }
