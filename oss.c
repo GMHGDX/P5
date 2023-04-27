@@ -1,13 +1,13 @@
-//copy assignment 3
-    //release and aquire new resources, update resource table
-    //add a sleeping queue for when there are not enough resources to request 
+//copy assignment
+    //get 2 or more children to run at once
+    //add a blocked queue for when there are not enough resources to request 
     //add deadlock detection and recovery algorithm (add fixed time to continuosly check this)
-
-    //test in log file
+    //add input for log file, test logfile
+    
 /////////////////////////////////////////////////////////////////////////
 
 // Name: Gabrielle Hieken
-// Class: 4760 Operating Systems
+// Class: 4760 Operating Systemsd
 // Date: 4/15/2023
 
 #include <stdio.h>
@@ -162,17 +162,13 @@ int main(int argc, char *argv[]){
         //Write the current time to memory for children to read
         writeToMem = currentTime;
         *shm_ptr = writeToMem;
-        //writeToMem = *shm_ptr;//TESTING (reading from share memory)
-
-        //printf("wrote to mem: %lf\n", currentTime); //TESTING
-    
-
+        
         //  i = 0;  //Finds the smallest positoin to put the new child into (cannot be over 17 or it will break our code)
         //  while(mypidstruct[i].simpid != 0){
         //       i++;
         //  }
         // if(limitReach <= currentTime && numofchild < 40 && currentTime <= 5 && i < 17) // if its time to create a child (limitReach <= currentTime), and we ahve less then 40 children, and 5 seconds have not passsed, and we have sapce for 1 more child (i < 17)
-        if(numofchild<1){   //For testing //add parameter for 40 children and more than 5 real seconds
+        if(numofchild < 2){   //For testing //add parameter for 40 children and more than 5 real seconds
             numofchild++;
            
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
