@@ -251,6 +251,7 @@ int main(int argc, char *argv[]){
 
         // receive a message from user_proc, but only one for our PID
         msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT);
+        printf("OSS checking message--> msg: %s intdata: %d and mtype %f\n", buf.strData, buf.intData, buf.mtype); //TESTING
         checkWhatToDo = atoi(buf.strData);  //If 0, means a process has died, if greater than 0, meana we got some reacourses to alloacte
 
         if(checkWhatToDo == 0){
@@ -275,7 +276,7 @@ int main(int argc, char *argv[]){
             
         }
         if(checkWhatToDo > 0){
-            printf("OSS recieved--> resources: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
+            printf("OSS recieved--> resources: %s my int data(child is): %d and mtype %f\n", buf.strData, buf.intData, buf.mtype); //TESTING
 
             text = strtok(buf.strData, " ");
             for (i=0;i<10;i++){

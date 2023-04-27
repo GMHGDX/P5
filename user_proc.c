@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
     buf.mtype = (long)getppid();
 
     //send our string to message queue
-    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
+    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd from child to parent failed\n"); exit(1); }
     printf("CHILD: sent message %s\n", together); //TESTING
     printf("-------------CHILD pid: %d\n", getpid()); //TESTING
 
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]){
     buf.intData = getpid();
     buf.mtype = (long)getppid();
 
-    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
+    if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd from child to parent failed\n"); exit(1); }
     printf("CHILD: sent my last message o7 farewell cruel; world\n");
 
     return 0;
