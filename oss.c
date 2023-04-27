@@ -31,7 +31,8 @@ typedef struct pidstruct {
 } pidstruct;
 
 int main(int argc, char *argv[]){
-    pidstruct mypidstruct[50];
+    int i;
+    int j;
 
     char* logFile = "logfile"; //logfile declaration
     FILE *fileLogging; //for the file 
@@ -39,6 +40,8 @@ int main(int argc, char *argv[]){
     int resourceTable[18][10]; //Initialize resource table
     int resourcesLeft[10];
     int blockedQueue[50];
+    pidstruct mypidstruct[50];
+
     srand(time(0)); //Seed the random number generator
 
     //variables for our system clock
@@ -89,8 +92,6 @@ int main(int argc, char *argv[]){
     }
 
     //Initialize empty resource table (all zeros)
-    int i;
-    int j;
     for(i = 0; i < 18; i++){
         for(j = 0; j < 10; j++){
             resourceTable[i][j] = 0;
@@ -137,7 +138,7 @@ int main(int argc, char *argv[]){
     int numofchild = 0; //DELETEEEEEEEEE
     char msgForChild[10]; //char 0for converting int sent to user_proc
     int milliSec = 0; //milliseconds used in time limit
-    int reasourcesUsed[10]; //resources in an array
+    int resourcesUsed[10]; //resources in an array
     char* text; //used to seperate message recieved by whitespace 
     int simpidofsender;
     bool notenoughresources = false;
@@ -218,7 +219,7 @@ int main(int argc, char *argv[]){
                 if(text == NULL){
                     break;
                 }
-                reasourcesUsed[i] = atoi(text);
+                resourcesUsed[i] = atoi(text);
                 text = strtok(NULL, " ");
             }
 
@@ -242,14 +243,15 @@ int main(int argc, char *argv[]){
 
             if(!notenoughresources){
                 //send message back to child that there are enough resources
-                buf.strData = "1";
+                strcpy(buf.strData, "1");
+                //buf.strData = "1";
                 buf.mtype = buf.intData;
                 printf("OSS is sending that it has available resources--> message: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
                 if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
 
                 //Update resource table with new values
                 for (i=0;i<10;i++){
-                    resourceTable[simpidofsender][i] = reasourcesUsed[i];
+                    resourceTable[simpidofsender][i] = resourcesUsed[i];
                     resourcesLeft[i] -= resourcesUsed[i];
                 }
 
@@ -267,14 +269,14 @@ int main(int argc, char *argv[]){
                         printf("%i\t", resourceTable[i][j]);
                     }
                     printf("\n");
-                }else{  //If notenough is true
-                    //send to blocked queue, should hold the pid of the process that is blocked and the rescoruces it is reuqesating, first in first out
-                    printf("Not enough resources! \n");
-
                 }
-                notenoughresources = false;     
+            }else{  //If notenough is true
+                //send to blocked queue, should hold the pid of the process that is blocked and the rescoruces it is reuqesating, first in first out
+                printf("Not enough resources! \n");
+
             }
             
+            notenoughresources = false;     
         }else{
             printf("No message received\n");
         }
