@@ -196,6 +196,8 @@ int main(int argc, char *argv[]){
             }
         }
 
+        printf("parent got here  _________________________________________");
+
 
         buf.intData = 0;
         strcpy(buf.strData, "-1"); //Clear the message string back to nothing before we check for a msgrcv
