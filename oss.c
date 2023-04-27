@@ -218,7 +218,6 @@ int main(int argc, char *argv[]){
             for (i=0;i<10;i++){
                 resourceTable[simpidofsender][i] = resourcesUsed[i];
                 resourcesUsed[i] += resourcesLeft[i];
-                printf("ResourcesUsed: %i\n", resourcesUsed[i]);
             }
 
             break; //end program
@@ -265,6 +264,7 @@ int main(int argc, char *argv[]){
                 for (i=0;i<10;i++){
                     resourceTable[simpidofsender][i] = resourcesUsed[i];
                     resourcesLeft[i] -= resourcesUsed[i];
+                printf("ResourcesLeft: %i\n", resourcesLeft[i]);
                 }
 
                 //Create resource header
