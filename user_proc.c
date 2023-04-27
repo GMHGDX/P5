@@ -36,9 +36,9 @@ int main(int argc, char *argv[]){
 
     //message queue
     if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //get message queue key used in oss
-    //if ((msqid = msgget(msqkey, PERMS)) == -1) { perror("msgget in child"); exit(1); } //access oss message queue
+    if ((msqid = msgget(msqkey, PERMS)) == -1) { perror("msgget in child"); exit(1); } //access oss message queue
   
-    //printf("CHILD: Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
+    printf("CHILD: Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
 
     //Create a random number for how many instances of each resource the process wants and add it to an array
     int i;
