@@ -37,6 +37,8 @@ int main(int argc, char *argv[]){
     FILE *fileLogging; //for the file 
     pid_t childpid = 0; //child process ID 
     int resourceTable[18][10]; //Initialize resource table
+    int resourcesLeft[10];
+    int blockedQueue[50];
     srand(time(0)); //Seed the random number generator
 
     //variables for our system clock
@@ -75,8 +77,18 @@ int main(int argc, char *argv[]){
             return (EXIT_FAILURE);
         }
     }
+    
+    //Initialize blocked queue
+    for(i = 0; i < 50; i++){
+        blockedQueue[i] = 0;
+    }
 
-    //Create empty resource table (all zeros)
+    //Initialize empty resources left (all zeros)
+    for(i = 0; i < 10; i++){
+        resourcesLeft[i] = 0;
+    }
+
+    //Initialize empty resource table (all zeros)
     int i;
     int j;
     for(i = 0; i < 18; i++){
@@ -128,6 +140,7 @@ int main(int argc, char *argv[]){
     int reasourcesUsed[10]; //resources in an array
     char* text; //used to seperate message recieved by whitespace 
     int simpidofsender;
+    bool notenoughresources = false;
 
     //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
@@ -208,11 +221,6 @@ int main(int argc, char *argv[]){
                 reasourcesUsed[i] = atoi(text);
                 text = strtok(NULL, " ");
             }
-            
-            // printf("We parsed out:"); //TESTING
-            // for (i=0;i<10;i++){
-            //     printf(" %i", reasourcesUsed[i]);
-            // }
 
             i = 0;
             while(i < 18){
@@ -225,25 +233,46 @@ int main(int argc, char *argv[]){
 
             printf("the simulated pid of the sender is: %i\n", simpidofsender);
 
-            //Update resource table with new values
-            for (i=0;i<10;i++){
-                resourceTable[simpidofsender][i] = reasourcesUsed[i];
-            }
-
-            //Create resource header
-            printf("\t");
+            //Check if we have enough resources for this process
             for(i=0;i<10;i++){
-                printf("R%i\t", i);
+                if((resourcesLeft[i] - resourcesUsed[i]) < 0){
+                    notenoughresources = true;
+                }
             }
-            printf("\n");
 
-            //Print resource table and max processes on the side
-            for(i = 0; i < 18; i++){
-                printf("P%i\t", i);
-                for(j = 0; j < 10; j++){
-                    printf("%i\t", resourceTable[i][j]);
+            if(!notenoughresources){
+                //send message back to child that there are enough resources
+                buf.strData = "1";
+                buf.mtype = buf.intData;
+                printf("OSS is sending that it has available resources--> message: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
+                if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
+
+                //Update resource table with new values
+                for (i=0;i<10;i++){
+                    resourceTable[simpidofsender][i] = reasourcesUsed[i];
+                    resourcesLeft[i] -= resourcesUsed[i];
+                }
+
+                //Create resource header
+                printf("\t");
+                for(i=0;i<10;i++){
+                    printf("R%i\t", i);
                 }
                 printf("\n");
+
+                //Print resource table and max processes on the side
+                for(i = 0; i < 18; i++){
+                    printf("P%i\t", i);
+                    for(j = 0; j < 10; j++){
+                        printf("%i\t", resourceTable[i][j]);
+                    }
+                    printf("\n");
+                }else{  //If notenough is true
+                    //send to blocked queue, should hold the pid of the process that is blocked and the rescoruces it is reuqesating, first in first out
+                    printf("Not enough resources! \n");
+
+                }
+                notenoughresources = false;     
             }
             
         }else{

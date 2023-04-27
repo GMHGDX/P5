@@ -84,8 +84,9 @@ int main(int argc, char *argv[]){
 
     //send our string to message queue
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd to child 1 failed\n"); exit(1); }
+    printf("sent message %s\n", together); //TESTING
 
-    printf("sent message %s\n", together);
-
+    if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
+    printf("Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
     return 0;
 }
