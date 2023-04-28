@@ -186,9 +186,7 @@ int main(int argc, char *argv[]){
     int checkWhatToDo = -1;
     bool allResourcesFree = false;
 
-    //Loop to handle our children processes and print the process table ---------------------------------------------------------------------
     while(1) {
-        //printf("num of children %i\n", numofchild); //TESTING
 
         //stop simulated system clock and get seconds and nanoseconds
         if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) { perror( "clock gettime" ); return EXIT_FAILURE; }
@@ -206,21 +204,12 @@ int main(int argc, char *argv[]){
         writeToMem = currentTime;
         *shm_ptr = writeToMem;
 
-        //  i = 0;  //Finds the smallest positoin to put the new child into (cannot be over 17 or it will break our code)
-        //  while(mypidstruct[i].simpid != 0){
-        //       i++;
-        //  }
-        // if(limitReach <= currentTime && numofchild < 40 && currentTime <= 5 && i < 17) // if its time to create a child (limitReach <= currentTime), and we ahve less then 40 children, and 5 seconds have not passsed, and we have sapce for 1 more child (i < 17)
         if(numofchild < 2){   //For testing //add parameter for 40 children and more than 5 real seconds
             numofchild++;
            
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
-            //printf("random milliSecond: %i\n", milliSec); //TESTING
 
             limitReach = sec + (double)(milliSec/1000) + (double)(nano/BILLION); //combine sec, millisec, and nanosec as one decimal to get new time to fork process
-
-            //printf("we are making a new process at: %lf\n", limitReach);  //TESTING
-            //printf("sec is %lf, mili  is %lf, nano is %lf\n", sec, (double)(milliSec/1000), (double)(nano/BILLION)); // TESTING 
 
             childpid = fork(); //fork child
 
@@ -244,10 +233,6 @@ int main(int argc, char *argv[]){
                 }
                 mypidstruct[i].simpid = i;
                 mypidstruct[i].realpid = childpid;
-
-                // for(i=0;i<10;i++){
-                //     printf("mypidstruct %i realpid %i\n", i, mypidstruct[i].realpid);
-                // }
             }
         }
 
@@ -255,11 +240,8 @@ int main(int argc, char *argv[]){
         strcpy(buf.strData, "-1"); //Clear the message string back to nothing before we check for a msgrcv
         checkWhatToDo = -1; //Return checkwaht todo back to "do nothing"
 
-        // receive a message from user_proc, but only one for our PID
-        msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT);
-        //printf("OSS checking message--> msg: %s intdata: %d and mtype %f\n", buf.strData, buf.intData, buf.mtype); //TESTING
+        msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT); // receive a message from user_proc, but only one for our PID
         checkWhatToDo = atoi(buf.strData);  //If 0, means a process has died, if greater than 0, meana we got some reacourses to alloacte
-        //printf("checlkwhat to do is %i\n", checkWhatToDo);
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
@@ -287,14 +269,10 @@ int main(int argc, char *argv[]){
                         resourceTable[simpidofsender][i] = 0;
                     }
                     printf("\n");
-
-
-                    //break;
                     i = 20;
                 }
                 i++;
             }
-
             //Create resource header
                 printf("\t");
                 for(i=0;i<10;i++){
@@ -310,18 +288,9 @@ int main(int argc, char *argv[]){
                     }
                     printf("\n");
                 }
-
-            // printf("recources deallocated: ");
-            // //Update resource table with new values
-            // for (i=0;i<10;i++){
-            //     printf(" %i",  resourceTable[simpidofsender][i]);
-            //     resourcesLeft[i] += resourceTable[simpidofsender][i];
-            //     resourceTable[simpidofsender][i] = 0;
-            // }
-            
         }
         if(checkWhatToDo > 0){
-            printf("OSS recieved--> resources: %s my int data(child is): %d and mtype %ld\n", buf.strData, buf.intData, buf.mtype); //TESTING
+            printf("Child %d is requesting the following resourceses: %s\n",buf.intData, buf.strData); //TESTING
 
             text = strtok(buf.strData, " ");
             for (i=0;i<10;i++){
@@ -331,7 +300,6 @@ int main(int argc, char *argv[]){
                 resourcesUsed[i] = atoi(text);
                 text = strtok(NULL, " ");
             }
-
             i = 0;
             while(i < 18){
                 if(mypidstruct[i].realpid == buf.intData){  //Will thius crash if mypidstruct[i].realpid is not set to anything (unitalized)
@@ -340,8 +308,6 @@ int main(int argc, char *argv[]){
                 }
                 i++;
             }
-
-            printf("the simulated pid of the sender is: %i\n", simpidofsender);
 
             //Check if we have enough resources for this process
             for(i=0;i<10;i++){
@@ -354,7 +320,7 @@ int main(int argc, char *argv[]){
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
                 buf.mtype = buf.intData;
-                printf("OSS is sending that it has available resources--> message: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
+                printf("There are enough resources for child  %d\n", buf.intData); //TESTING
                 if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
 
                 //Update resource table with new values
@@ -380,65 +346,30 @@ int main(int argc, char *argv[]){
                 }
             }else{  //If notenough is true
                 //send to blocked queue, should hold the pid of the process that is blocked and the rescoruces it is reuqesating, first in first out
-                printf("Not enough resources! Get blocked! \n");
+                printf("There is not enough resources for child %d, sent to blocked queue\n", buf.intData);
                 toInsert.pid = buf.intData;
                 for(i=0;i<10;i++){
                     toInsert.resources[i] = resourcesUsed[i];
                 }
                 insert(toInsert);
-
-                //TESTING
-                toInsert = peek();
-                printf("Test: looking at front of blocekd queue pid = %i\n Resources are:", toInsert.pid);
-                for(i=0;i<10;i++){
-                    printf(" %i", toInsert.resources[i]);
-                }
-                printf("\n");
             } 
             notenoughresources = false;
         }
-        //End of msgrcv
 
-
-        if(!isEmpty()){ //Is blocekd queue empty
-            //printf("checking if there is sapce for my fucko\n");
-            //Check if the front of the blocked queue has enough resoucres to be allowed to run
+        if(!isEmpty()){ //Is blocked queue empty?
             toInsert = peek();
             for (i=0;i<10;i++){
                 resourcesUsed[i] = toInsert.resources[i];
             }
-            //Check if we have enough resources for this process
-            // printf("Remainder:");
-            // for(i=0;i<10;i++){
-            //     printf(" %i", (resourcesLeft[i] - resourcesUsed[i]));
-            //     if((resourcesLeft[i] - resourcesUsed[i]) < 0){
-            //         printf("do not ahve enough\n");
-            //         notenoughresources = true;
-            //     }
-            // }
-            // printf("\n");
-
-            // printf("RescouresLeft:");
-            // for(i=0;i<10;i++){
-            //     printf(" %i", resourcesLeft[i]);
-            // }
-            // printf("\n");
-
-            // printf("Rescouresused:");
-            // for(i=0;i<10;i++){
-            //     printf(" %i", resourcesUsed[i]);
-            // }
-            // printf("\n");
-
 
             if(!notenoughresources){
-                printf("have enough!!!!!!!\n");
-                removeData(); //Delete recourse from front of queue
+                printf("There are enough resources for %d to come out of the blocked queue\n", toInsert);
+                removeData(); //Delete process from front of queue
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
                 buf.mtype = toInsert.pid;
                 buf.intData = toInsert.pid;
-                printf("OSS is sending that it has available resources--> message: %s my int data(child is): %d\n", buf.strData, buf.intData); //TESTING
+                printf("Child %d is granted the following resources: %s\n", buf.intData, buf.strData); //TESTING
                 if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
 
                 //Update resource table with new values
@@ -463,38 +394,26 @@ int main(int argc, char *argv[]){
                     printf("\n");
                 }
             }
-            // else{
-            //     prtinf("still cant get the guy out from bloeck queue");
-            // }
             notenoughresources = false;
         }
-
-        //printf("checking if its time to end");
-        //Check if we should terminate porgram
-        //printf("resourcesLeft::: ");
-        for(i=0;i<10;i++){
-            //printf(" %i", resourcesLeft[i]);
+        
+        for(i=0;i<10;i++){ //detecting if all resources are deallocated for all processes
             if(resourcesLeft[i] != 20){
-                //printf("Not :( set\n");
                 allResourcesFree = false;
-                break; //Get out of this for loop, there are programs still using recources
+                break; 
             }
             if(i == 9 && resourcesLeft[i] == 20){
-                //printf("perfectly set\n");
                 allResourcesFree = true;
             }
         }
-
+        
        //printf("%d && %d && %d && %d\n", allResourcesFree, isEmpty(), numofchild>1 , currentTime > 5);
-        if(allResourcesFree && isEmpty() && numofchild>1 && currentTime > 5){
-            printf("All paraemtersa are met. ENDING____");
+        if(allResourcesFree && isEmpty() && numofchild > 1 && currentTime > 5){
+            printf("Ending Program!");
             break; //end program
         }else{
             allResourcesFree = false;
         }
-        
-
-        //end of loop
     }  
 
     printf("waiting for the child to end its own life\n");
@@ -507,7 +426,7 @@ int main(int argc, char *argv[]){
     }
     printf("\n");
 
-    //Print resource table and max processes on the side
+    //Print deallocated resource table and max processes last time
     for(i = 0; i < 18; i++){
         printf("P%i\t", i);
         for(j = 0; j < 10; j++){
@@ -521,14 +440,6 @@ int main(int argc, char *argv[]){
         printf(" %i", resourcesLeft[i]);
     }
     printf("\n");
-
-    // printf("MyPidStruct:\n");
-    // for(i=0;i<20;i++){
-    //     printf("%i:  realid: %i, simid: %i\n", i, mypidstruct[i].realpid, mypidstruct[i].simpid);
-    // }
-    // printf("\n");
-
-    //printf("blockedQueue:");
 
     printf("deleting memory");
     shmdt( shm_ptr ); // Detach from the shared memory segment
