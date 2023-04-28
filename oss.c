@@ -128,6 +128,8 @@ int main(int argc, char *argv[]){
         }
     }
 
+    fileLogging = fopen(logFile, "w+"); //Open the log file before input begins 
+
     //Initialize empty resources left (all zeros)
     for(i = 0; i < 10; i++){
         resourcesLeft[i] = 20;
@@ -156,8 +158,6 @@ int main(int argc, char *argv[]){
         }
         printf("\n");
     }
-    
-    fileLogging = fopen(logFile, "w+"); //Open the log file before input begins 
 
     //Create message queue
     if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //Create key using ftok() for more uniquenes
