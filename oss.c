@@ -362,7 +362,7 @@ int main(int argc, char *argv[]){
                 strcpy(buf.strData, "1");
                 buf.mtype = toInsert.pid;
                 buf.intData = toInsert.pid;
-                printf("Child %d is granted their resources: %s\n", buf.intData); 
+                printf("Child %d is granted the following resources: %s\n", buf.intData, buf.strData); //TESTING
                 if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
 
                 //Update resource table with new values
@@ -370,6 +370,13 @@ int main(int argc, char *argv[]){
                     resourceTable[simpidofsender][i] = resourcesUsed[i];
                     resourcesLeft[i] -= resourcesUsed[i];
                 }
+
+                //Create resource header
+                printf("\t");
+                for(i=0;i<10;i++){
+                    printf("2R%i\t", i);
+                }
+                printf("\n");
 
                 //Print resource table and max processes on the side
                 for(i = 0; i < 18; i++){
