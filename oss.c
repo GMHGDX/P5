@@ -363,7 +363,7 @@ int main(int argc, char *argv[]){
             }
 
             if(!notenoughresources){
-                printf("There are enough resources for %d to come out of the blocked queue\n", toInsert);
+                printf("There are enough resources for %i to come out of the blocked queue\n", toInsert);
                 removeData(); //Delete process from front of queue
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
