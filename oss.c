@@ -147,16 +147,21 @@ int main(int argc, char *argv[]){
      fprintf(fileLogging, "\t");
     for(i=0;i<10;i++){
         printf("R%i\t", i);
+        fprintf(fileLogging, "R%i\t", i);
     }
     printf("\n");
+    fprintf(fileLogging, "\n");
 
     //Print resource table and max processes on the side
     for(i = 0; i < 18; i++){
         printf("P%i\t", i);
+        fprintf(fileLogging, "P%i\t", i);
         for(j = 0; j < 10; j++){
             printf("%i\t", resourceTable[i][j]);
+            fprintf(fileLogging, "%i\t", resourceTable[i][j]);
         }
         printf("\n");
+        fprintf(fileLogging, "\n");
     }
 
     //Create message queue
