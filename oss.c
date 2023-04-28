@@ -170,11 +170,11 @@ int main(int argc, char *argv[]){
 
     //create shared memory
     int shm_id = shmget(sh_key, sizeof(double), IPC_CREAT | 0666);
-    if(shm_id <= 0) {(stderr,"ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id); exit(1); }
+    if(shm_id <= 0) {printf(stderr,"ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id); exit(1); }
 
     //attatch memory we allocated to our process and point pointer to it 
     double *shm_ptr = (double*) (shmat(shm_id, NULL, 0));
-    if (shm_ptr <= 0) {(stderr,"Shared memory attach failed\n"); exit(1); }
+    if (shm_ptr <= 0) {printf(stderr,"Shared memory attach failed\n"); exit(1); }
 
     //start the simulated system clock
     if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) { perror( "clock gettime" ); return EXIT_FAILURE; }
