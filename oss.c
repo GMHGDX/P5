@@ -417,7 +417,7 @@ int main(int argc, char *argv[]){
 
 
             if(!notenoughresources){
-                pritnf("have enough!!!!!!!\n");
+                printf("have enough!!!!!!!\n");
                 removeData(); //Delete recourse from front of queue
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
