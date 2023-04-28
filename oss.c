@@ -324,6 +324,7 @@ int main(int argc, char *argv[]){
                     notenoughresources = true;
                 }
             }
+        }
 
             if(!notenoughresources){
                 //send message back to child that there are enough resources
@@ -343,8 +344,8 @@ int main(int argc, char *argv[]){
                 printf("\t");
                 //fprintf(fileLogging, "\t");
                 for(i=0;i<10;i++){
-                    printf("1R%i\t", i);
-                    //fprintf(fileLogging, "1R%i\t", i);
+                    printf("R%i\t", i);
+                    //fprintf(fileLogging, "R%i\t", i);
                 }
                 printf("\n");
                 //fprintf(fileLogging, "\n");
@@ -371,7 +372,7 @@ int main(int argc, char *argv[]){
                 insert(toInsert);
             } 
             notenoughresources = false;
-        }
+
 
         if(!isEmpty()){ //Is blocked queue empty?
             toInsert = peek();
@@ -411,6 +412,7 @@ int main(int argc, char *argv[]){
             notenoughresources = false;
         }
         
+        
         for(i=0;i<10;i++){ //detecting if all resources are deallocated for all processes
             if(resourcesLeft[i] != 20){
                 allResourcesFree = false;
@@ -430,7 +432,6 @@ int main(int argc, char *argv[]){
             allResourcesFree = false;
         }
     }  
-    
 
     printf("waiting for the child to end its own life\n");
     //fprintf(fileLogging, "waiting for the child to end its own life\n");
@@ -440,8 +441,8 @@ int main(int argc, char *argv[]){
     printf("\t");
     //fprintf(fileLogging, "\t");
     for(i=0;i<10;i++){
-        printf("3R%i\t", i);
-        //fprintf(fileLogging, "3R%i\t", i);
+        printf("R%i\t", i);
+        //fprintf(fileLogging, "R%i\t", i);
     }
     printf("\n");
     //fprintf(fileLogging, "\n");
