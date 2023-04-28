@@ -325,7 +325,7 @@ int main(int argc, char *argv[]){
                 //Create resource header
                 printf("\t");
                 for(i=0;i<10;i++){
-                    printf("R%i\t", i);
+                    printf("1R%i\t", i);
                 }
                 printf("\n");
 
@@ -374,7 +374,7 @@ int main(int argc, char *argv[]){
                 //Create resource header
                 printf("\t");
                 for(i=0;i<10;i++){
-                    printf("R%i\t", i);
+                    printf("2R%i\t", i);
                 }
                 printf("\n");
 
@@ -415,7 +415,7 @@ int main(int argc, char *argv[]){
     //Create resource header
     printf("\t");
     for(i=0;i<10;i++){
-        printf("R%i\t", i);
+        printf("3R%i\t", i);
     }
     printf("\n");
 
