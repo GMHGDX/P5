@@ -297,6 +297,22 @@ int main(int argc, char *argv[]){
                 i++;
             }
 
+            //Create resource header
+                printf("\t");
+                for(i=0;i<10;i++){
+                    printf("R%i\t", i);
+                }
+                printf("\n");
+
+                //Print resource table and max processes on the side
+                for(i = 0; i < 18; i++){
+                    printf("P%i\t", i);
+                    for(j = 0; j < 10; j++){
+                        printf("%i\t", resourceTable[i][j]);
+                    }
+                    printf("\n");
+                }
+
             // printf("recources deallocated: ");
             // //Update resource table with new values
             // for (i=0;i<10;i++){
@@ -394,27 +410,27 @@ int main(int argc, char *argv[]){
                 resourcesUsed[i] = toInsert.resources[i];
             }
             //Check if we have enough resources for this process
-            printf("Remainder:");
-            for(i=0;i<10;i++){
-                printf(" %i", (resourcesLeft[i] - resourcesUsed[i]));
-                if((resourcesLeft[i] - resourcesUsed[i]) < 0){
-                    printf("do not ahve enough\n");
-                    notenoughresources = true;
-                }
-            }
-            printf("\n");
+            // printf("Remainder:");
+            // for(i=0;i<10;i++){
+            //     printf(" %i", (resourcesLeft[i] - resourcesUsed[i]));
+            //     if((resourcesLeft[i] - resourcesUsed[i]) < 0){
+            //         printf("do not ahve enough\n");
+            //         notenoughresources = true;
+            //     }
+            // }
+            // printf("\n");
 
-            printf("RescouresLeft:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft[i]);
-            }
-            printf("\n");
+            // printf("RescouresLeft:");
+            // for(i=0;i<10;i++){
+            //     printf(" %i", resourcesLeft[i]);
+            // }
+            // printf("\n");
 
-            printf("Rescouresused:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesUsed[i]);
-            }
-            printf("\n");
+            // printf("Rescouresused:");
+            // for(i=0;i<10;i++){
+            //     printf(" %i", resourcesUsed[i]);
+            // }
+            // printf("\n");
 
 
             if(!notenoughresources){
@@ -457,21 +473,21 @@ int main(int argc, char *argv[]){
 
         //printf("checking if its time to end");
         //Check if we should terminate porgram
-        printf("resourcesLeft::: ");
+        //printf("resourcesLeft::: ");
         for(i=0;i<10;i++){
-            printf(" %i", resourcesLeft[i]);
+            //printf(" %i", resourcesLeft[i]);
             if(resourcesLeft[i] != 20){
-                printf("Not :( set\n");
+                //printf("Not :( set\n");
                 allResourcesFree = false;
                 break; //Get out of this for loop, there are programs still using recources
             }
             if(i == 9 && resourcesLeft[i] == 20){
-                printf("perfectly set\n");
+                //printf("perfectly set\n");
                 allResourcesFree = true;
             }
         }
 
-        printf("%d && %d && %d && %d\n", allResourcesFree, isEmpty(), numofchild>1 , currentTime > 5);
+       //printf("%d && %d && %d && %d\n", allResourcesFree, isEmpty(), numofchild>1 , currentTime > 5);
         if(allResourcesFree && isEmpty() && numofchild>1 && currentTime > 5){
             printf("All paraemtersa are met. ENDING____");
             break; //end program
