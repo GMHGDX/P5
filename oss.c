@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
     pidstruct mypidstruct[50];
 
     for(i=0;i<50;i++){
-        mypidstruct.simpid = -1;
+        mypidstruct[i].simpid = -1;
     }
 
     srand(time(0)); //Seed the random number generator
