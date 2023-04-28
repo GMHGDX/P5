@@ -417,7 +417,7 @@ int main(int argc, char *argv[]){
             }
         }
 
-        if(allResourcesFree && isEmpty() && numofchild>1){
+        if(allResourcesFree && isEmpty() && numofchild>1 && currentTime > 5){
             break; //end program
         }else{
             allResourcesFree = false;
