@@ -247,9 +247,9 @@ int main(int argc, char *argv[]){
                 mypidstruct[i].simpid = i;
                 mypidstruct[i].realpid = childpid;
 
-                for(i=0;i<10;i++){
-                    printf("mypidstruct %i realpid %i\n", i, mypidstruct[i].realpid);
-                }
+                // for(i=0;i<10;i++){
+                //     printf("mypidstruct %i realpid %i\n", i, mypidstruct[i].realpid);
+                // }
             }
         }
 
@@ -268,11 +268,12 @@ int main(int argc, char *argv[]){
             printf("dealloacting\n");
             i = 0;
             printf("sender is: %i\n", buf.intData);
-            for(i=0;i<10;i++){
+            for(i=0;i<5;i++){
                 printf("mypidstruct %i realpid %i\n", i, mypidstruct[i].realpid);
             }
-
+            i = 0;
             while(i < 18){
+                printf("I is %i\n", i);
                 if(mypidstruct[i].realpid == buf.intData){  //Will this crash if mypidstruct[i].realpid is not set to anything (unitalized)
                     simpidofsender = mypidstruct[i].simpid;
                     printf("found pid %i in position %i, with simpid %i\n", mypidstruct[i].realpid, i, mypidstruct[i].simpid);
