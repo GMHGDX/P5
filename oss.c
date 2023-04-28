@@ -325,7 +325,7 @@ int main(int argc, char *argv[]){
                 //Create resource header
                 printf("\t");
                 for(i=0;i<10;i++){
-                    printf("1R%i\t", i);
+                    printf("R%i\t", i);
                 }
                 printf("\n");
 
@@ -371,12 +371,12 @@ int main(int argc, char *argv[]){
                     resourcesLeft[i] -= resourcesUsed[i];
                 }
 
-                //Create resource header
-                printf("\t");
-                for(i=0;i<10;i++){
-                    printf("2R%i\t", i);
-                }
-                printf("\n");
+                // //Create resource header
+                // printf("\t");
+                // for(i=0;i<10;i++){
+                //     printf("2R%i\t", i);
+                // }
+                // printf("\n");
 
                 //Print resource table and max processes on the side
                 for(i = 0; i < 18; i++){
@@ -409,13 +409,13 @@ int main(int argc, char *argv[]){
         }
     }  
 
-    printf("waiting for the child to end its own life\n");
+    printf(" Waiting for the child to end its own life\n");
     wait(0); //wait for child to finish in user_proc
 
     //Create resource header
     printf("\t");
     for(i=0;i<10;i++){
-        printf("3R%i\t", i);
+        printf("R%i\t", i);
     }
     printf("\n");
 
@@ -428,7 +428,7 @@ int main(int argc, char *argv[]){
         printf("\n");
     }
 
-    printf("RescouresLeft:");
+    printf("RescouresLeft:\n");
     for(i=0;i<10;i++){
         printf(" %i", resourcesLeft[i]);
     }
