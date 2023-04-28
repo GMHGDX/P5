@@ -210,7 +210,7 @@ int main(int argc, char *argv[]){
         writeToMem = currentTime;
         *shm_ptr = writeToMem;
 
-        if(numofChild < 2){   //For testing //add parameter for 40 children and more than 5 real seconds
+        if(numofchild < 2){   //For testing //add parameter for 40 children and more than 5 real seconds
         if(limitReach > currentTime){
             numofchild++;
            
