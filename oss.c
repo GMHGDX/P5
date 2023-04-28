@@ -1,6 +1,4 @@
 //copy assignment
-    //get 2 or more children to run at once
-    //add a blocked queue for when there are not enough resources to request 
     //add deadlock detection and recovery algorithm (add fixed time to continuosly check this)
     //add input for log file, test logfile
     
