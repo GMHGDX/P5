@@ -397,6 +397,7 @@ int main(int argc, char *argv[]){
             for(i=0;i<10;i++){
                 printf(" %i", (resourcesLeft[i] - resourcesUsed[i]));
                 if((resourcesLeft[i] - resourcesUsed[i]) < 0){
+                    printf("do not ahve enough\n");
                     notenoughresources = true;
                 }
             }
