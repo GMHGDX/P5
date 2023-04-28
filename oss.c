@@ -306,7 +306,7 @@ int main(int argc, char *argv[]){
             
         }
         if(checkWhatToDo > 0){
-            printf("OSS recieved--> resources: %s my int data(child is): %d and mtype %f\n", buf.strData, buf.intData, buf.mtype); //TESTING
+            printf("OSS recieved--> resources: %s my int data(child is): %d and mtype %ld\n", buf.strData, buf.intData, buf.mtype); //TESTING
 
             text = strtok(buf.strData, " ");
             for (i=0;i<10;i++){
@@ -399,17 +399,17 @@ int main(int argc, char *argv[]){
                 }
             }
 
-            // printf("RescouresLeft:");
-            // for(i=0;i<10;i++){
-            //     printf(" %i", resourcesLeft[i]);
-            // }
-            // printf("\n");
+            printf("RescouresLeft:");
+            for(i=0;i<10;i++){
+                printf(" %i", resourcesLeft[i]);
+            }
+            printf("\n");
 
-            // printf("Rescouresused:");
-            // for(i=0;i<10;i++){
-            //     printf(" %i", resourcesUsed[i]);
-            // }
-            // printf("\n");
+            printf("Rescouresused:");
+            for(i=0;i<10;i++){
+                printf(" %i", resourcesUsed[i]);
+            }
+            printf("\n");
             if(!notenoughresources){
                 notenoughresources = false;
                 removeData(); //Delete recourse from front of queue
