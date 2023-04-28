@@ -457,16 +457,20 @@ int main(int argc, char *argv[]){
 
         //printf("checking if its time to end");
         //Check if we should terminate porgram
+        printf("resourcesLeft::: ");
         for(i=0;i<10;i++){
+            printf(" %i", resourcesLeft[i]);
             if(resourcesLeft[i] != 20){
+                printf("Not :( set\n");
                 allResourcesFree = false;
                 break; //Get out of this for loop, there are programs still using recources
             }
             if(i == 9 && resourcesLeft[i] == 20){
+                printf("perfectly set\n");
                 allResourcesFree = true;
             }
         }
-        
+
         printf("%d && %d && %d && %d\n", allResourcesFree, isEmpty(), numofchild>1 , currentTime > 5);
         if(allResourcesFree && isEmpty() && numofchild>1 && currentTime > 5){
             printf("All paraemtersa are met. ENDING____");
