@@ -245,23 +245,16 @@ int main(int argc, char *argv[]){
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
-            printf("dealloacting\n");
-            i = 0;
-            printf("sender is: %i\n", buf.intData);
-            for(i=0;i<5;i++){
-                printf("mypidstruct %i realpid %i\n", i, mypidstruct[i].realpid);
-            }
+            printf("Dealloacting\n");
             i = 0;
             while(i < 18){
-                printf("I is %i\n", i);
                 if(mypidstruct[i].realpid == buf.intData){  //Will this crash if mypidstruct[i].realpid is not set to anything (unitalized)
                     simpidofsender = mypidstruct[i].simpid;
-                    printf("found pid %i in position %i, with simpid %i\n", mypidstruct[i].realpid, i, mypidstruct[i].simpid);
 
                     mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
                     mypidstruct[i].simpid = -1;
 
-                    printf("recources deallocated: ");
+                    printf("Resources deallocated: ");
                     //Update resource table with new values
                     for (i=0;i<10;i++){
                         printf(" %i",  resourceTable[simpidofsender][i]);
