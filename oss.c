@@ -1,9 +1,3 @@
-//copy assignment
-    //add deadlock detection and recovery algorithm (add fixed time to continuosly check this)
-    //add input for log file, test logfile
-    
-/////////////////////////////////////////////////////////////////////////
-
 // Name: Gabrielle Hieken
 // Class: 4760 Operating Systemsd
 // Date: 4/15/2023
