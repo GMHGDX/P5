@@ -280,19 +280,29 @@ int main(int argc, char *argv[]){
 
                     mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
                     mypidstruct[i].simpid = -1;
+
+                    printf("recources deallocated: ");
+                    //Update resource table with new values
+                    for (i=0;i<10;i++){
+                        printf(" %i",  resourceTable[simpidofsender][i]);
+                        resourcesLeft[i] += resourceTable[simpidofsender][i];
+                        resourceTable[simpidofsender][i] = 0;
+                    }
+
+
                     //break;
                     i = 20;
                 }
                 i++;
             }
 
-            printf("recources deallocated: ");
-            //Update resource table with new values
-            for (i=0;i<10;i++){
-                printf(" %i",  resourceTable[simpidofsender][i]);
-                resourcesLeft[i] += resourceTable[simpidofsender][i];
-                resourceTable[simpidofsender][i] = 0;
-            }
+            // printf("recources deallocated: ");
+            // //Update resource table with new values
+            // for (i=0;i<10;i++){
+            //     printf(" %i",  resourceTable[simpidofsender][i]);
+            //     resourcesLeft[i] += resourceTable[simpidofsender][i];
+            //     resourceTable[simpidofsender][i] = 0;
+            // }
             
         }
         if(checkWhatToDo > 0){
