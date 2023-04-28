@@ -320,7 +320,7 @@ int main(int argc, char *argv[]){
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
                 buf.mtype = buf.intData;
-                printf("There are enough resources for child  %d\n", buf.intData); //TESTING
+                printf("There are enough resources for child  %i\n", buf.intData); //TESTING
                 if (msgsnd(msqid, &buf, sizeof(msgbuffer)-sizeof(long), 0) == -1) { perror("msgsnd to child 1 failed\n"); exit(1); } 
 
                 //Update resource table with new values
