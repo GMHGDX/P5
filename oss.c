@@ -358,7 +358,7 @@ int main(int argc, char *argv[]){
 
 
         if(!isEmpty()){ //Is blocekd queue empty
-        printf("checking if there is sapce for my fucko\n");
+            //printf("checking if there is sapce for my fucko\n");
             //Check if the front of the blocked queue has enough resoucres to be allowed to run
             toInsert = peek();
             for (i=0;i<10;i++){
