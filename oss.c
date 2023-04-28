@@ -159,7 +159,7 @@ int main(int argc, char *argv[]){
             fprintf(fileLogging, "%i\t", resourceTable[i][j]); 
         }
         printf("\n");
-        fprintf(fileLogging, "\n", buf.intData); 
+        fprintf(fileLogging, "\n"); 
     }
     
     fileLogging = fopen(logFile, "w+"); //Open the log file before input begins 
