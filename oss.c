@@ -280,7 +280,8 @@ int main(int argc, char *argv[]){
 
                     mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
                     mypidstruct[i].simpid = -1;
-                    break;
+                    //break;
+                    i = 20;
                 }
                 i++;
             }
