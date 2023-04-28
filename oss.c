@@ -418,6 +418,7 @@ int main(int argc, char *argv[]){
         }
 
         if(allResourcesFree && isEmpty() && numofchild>1 && currentTime > 5){
+            printf("All paraemtersa are met. ENDING____")
             break; //end program
         }else{
             allResourcesFree = false;
