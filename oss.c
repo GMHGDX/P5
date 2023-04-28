@@ -393,25 +393,27 @@ int main(int argc, char *argv[]){
                 resourcesUsed[i] = toInsert.resources[i];
             }
             //Check if we have enough resources for this process
+            printf("Remainder:");
             for(i=0;i<10;i++){
+                printf(" %i", (resourcesLeft[i] - resourcesUsed[i]));
                 if((resourcesLeft[i] - resourcesUsed[i]) < 0){
                     notenoughresources = true;
                 }
             }
 
-            printf("RescouresLeft:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft[i]);
-            }
-            printf("\n");
+            // printf("RescouresLeft:");
+            // for(i=0;i<10;i++){
+            //     printf(" %i", resourcesLeft[i]);
+            // }
+            // printf("\n");
 
-            printf("Rescouresused:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesUsed[i]);
-            }
-            printf("\n");
+            // printf("Rescouresused:");
+            // for(i=0;i<10;i++){
+            //     printf(" %i", resourcesUsed[i]);
+            // }
+            // printf("\n");
 
-            
+
             if(!notenoughresources){
                 notenoughresources = false;
                 removeData(); //Delete recourse from front of queue
