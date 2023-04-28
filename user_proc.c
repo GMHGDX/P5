@@ -87,6 +87,7 @@ int main(int argc, char *argv[]){
     while(checkResponse != 1){
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("2 failed to receive message from parent\n"); exit(1); }
         checkResponse = atoi(buf.strData);
+        printf("got a response it is %i\n");
     }
     sleep(1);
 
