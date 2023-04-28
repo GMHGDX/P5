@@ -336,7 +336,6 @@ int main(int argc, char *argv[]){
             }
 
             if(!notenoughresources){
-                notenoughresources = false;
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
                 buf.mtype = buf.intData;
@@ -381,6 +380,7 @@ int main(int argc, char *argv[]){
                 }
                 printf("\n");
             } 
+            notenoughresources = false;
         }
         //End of msgrcv
 
@@ -417,7 +417,7 @@ int main(int argc, char *argv[]){
 
 
             if(!notenoughresources){
-                notenoughresources = false;
+                pritnf("have enough!!!!!!!\n");
                 removeData(); //Delete recourse from front of queue
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
@@ -451,6 +451,7 @@ int main(int argc, char *argv[]){
             // else{
             //     prtinf("still cant get the guy out from bloeck queue");
             // }
+            notenoughresources = false;
         }
 
         //printf("checking if its time to end");
