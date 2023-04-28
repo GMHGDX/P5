@@ -211,7 +211,6 @@ int main(int argc, char *argv[]){
         *shm_ptr = writeToMem;
 
         if(numofchild < 2){   //For testing //add parameter for 40 children and more than 5 real seconds
-        if(limitReach > currentTime){
             numofchild++;
            
             milliSec = randomNumberGenerator(milliLim); //create random number for next child to fork at 
@@ -241,7 +240,6 @@ int main(int argc, char *argv[]){
                 mypidstruct[i].simpid = i;
                 mypidstruct[i].realpid = childpid;
             }
-        }
         }
 
         buf.intData = 0;
