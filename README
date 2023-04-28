@@ -11,7 +11,7 @@ What works:
 - All input is recorded in a logfile
 
 Not working: 
-- Process does not claim new resources for deadlock detection
+- Process does not claim new resources for deadlock detection and recovery
 
 To run project: 
 ./oss -f ""   
@@ -20,6 +20,6 @@ To run project:
 "" = string for name of logfile, '-f ""' is optional. It will create a log file named 'logfile' if it is given no -f argument
 
 Github: 
-https://github.com/GMHGDX/P4
+https://github.com/GMHGDX/P5
 
 Used message queues to communicate requests, allocation, and release of resources
