@@ -87,6 +87,10 @@ int main(int argc, char *argv[]){
     int resourcesLeft[10];
     pidstruct mypidstruct[50];
 
+    for(i=0;i<50;i++){
+        mypidstruct.simpid = -1;
+    }
+
     srand(time(0)); //Seed the random number generator
 
     //variables for our system clock
@@ -234,7 +238,7 @@ int main(int argc, char *argv[]){
             }
             if(childpid != 0 ){               
                 i = 0;  //Finds the smallest positoin to put the new child into (cannot be over 17 or it will break our code)
-                while(mypidstruct[i].simpid != 0){
+                while(mypidstruct[i].simpid != -1){
                     i++;
                 }
                 if(i>17){
@@ -259,13 +263,14 @@ int main(int argc, char *argv[]){
             //de allocate ur shit
             printf("dealloacting\n");
             i = 0;
+            printf("sender is: %i\n", buf.intData);
             while(i < 18){
                 if(mypidstruct[i].realpid == buf.intData){  //Will this crash if mypidstruct[i].realpid is not set to anything (unitalized)
                     simpidofsender = mypidstruct[i].simpid;
                     printf("found pid %i in position %i, with simpid %i\n", mypidstruct[i].realpid, i, mypidstruct[i].simpid);
 
                     mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
-                    mypidstruct[i].simpid = 0;
+                    mypidstruct[i].simpid = -1;
                     break;
                 }
                 i++;
