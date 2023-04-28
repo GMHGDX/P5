@@ -288,7 +288,7 @@ int main(int argc, char *argv[]){
                         resourcesLeft[i] += resourceTable[simpidofsender][i];
                         resourceTable[simpidofsender][i] = 0;
                     }
-                    printf("\n")
+                    printf("\n");
 
 
                     //break;
