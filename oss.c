@@ -430,7 +430,7 @@ int main(int argc, char *argv[]){
             allResourcesFree = false;
         }
     }  
-    }
+    
 
     printf("waiting for the child to end its own life\n");
     fprintf(fileLogging, "waiting for the child to end its own life\n");
@@ -476,4 +476,5 @@ int main(int argc, char *argv[]){
     fclose(fileLogging); //close the log file
 
     return 0;
+}
 }
