@@ -251,9 +251,9 @@ int main(int argc, char *argv[]){
 
         // receive a message from user_proc, but only one for our PID
         msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), IPC_NOWAIT);
-        printf("OSS checking message--> msg: %s intdata: %d and mtype %f\n", buf.strData, buf.intData, buf.mtype); //TESTING
+        //printf("OSS checking message--> msg: %s intdata: %d and mtype %f\n", buf.strData, buf.intData, buf.mtype); //TESTING
         checkWhatToDo = atoi(buf.strData);  //If 0, means a process has died, if greater than 0, meana we got some reacourses to alloacte
-        printf("checlkwhat to do is %i\n", checkWhatToDo);
+        //printf("checlkwhat to do is %i\n", checkWhatToDo);
 
         if(checkWhatToDo == 0){
             //de allocate ur shit
@@ -405,7 +405,7 @@ int main(int argc, char *argv[]){
             // }
         }
 
-        printf("checking if its time to end");
+        //printf("checking if its time to end");
         //Check if we should terminate porgram
         for(i=0;i<10;i++){
             if(resourcesLeft[i] != 20){
