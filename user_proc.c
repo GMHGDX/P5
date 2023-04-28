@@ -32,13 +32,9 @@ int main(int argc, char *argv[]){
     double readFromMem;
     readFromMem = *shm_ptr;
 
-    //printf("\nCHILD: This is the number child read from memory: %lf\n", readFromMem);  //TESTING
-
     //message queue
     if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //get message queue key used in oss
     if ((msqid = msgget(msqkey, PERMS)) == -1) { perror("msgget in child"); exit(1); } //access oss message queue
-  
-    ////printf("CHILD: Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
 
     //Create a random number for how many instances of each resource the process wants and add it to an array
     int i;
@@ -64,8 +60,6 @@ int main(int argc, char *argv[]){
         }
     }
 
-    //printf("CHILD: These are your resources in one string format: %s\n", together); //TESTING
-
     //copy our new string into mtext
     strcpy(buf.strData, together);
 
@@ -75,19 +69,13 @@ int main(int argc, char *argv[]){
 
     //send our string to message queue
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd from child to parent failed\n"); exit(1); }
-    //printf("CHILD: sent message %s\n", together); //TESTING
-    //printf("-------------CHILD pid: %d\n", getpid()); //TESTING
-
     if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("1 failed to receive message from parent\n"); exit(1); } // receive a message from oss, but only one for our PID
-    //printf("CHILD: Child %d received message: %s was my message and my int data was %d\n",getpid(), buf.strData, buf.intData); //TESTING
-    int checkResponse = atoi(buf.strData);
 
-    //printf("CHILD: recieved checkresponse %i from parent\n", checkResponse);
+    int checkResponse = atoi(buf.strData);
     
     while(checkResponse != 1){
         if (msgrcv(msqid, &buf, sizeof(msgbuffer), getpid(), 0) == -1) { perror("2 failed to receive message from parent\n"); exit(1); }
         checkResponse = atoi(buf.strData);
-        //printf("got a response it is %i\n");
     }
     sleep(1);
 
@@ -96,8 +84,7 @@ int main(int argc, char *argv[]){
     buf.intData = getpid();
     buf.mtype = (long)getppid();
 
+    //send last message to let oss know it is terminating
     if(msgsnd(msqid, &buf, sizeof(msgbuffer), 0 == -1)){ perror("msgsnd from child to parent failed\n"); exit(1); }
-    //printf("CHILD: sent my last message o7 farewell cruel; world\n");
-
     return 0;
 }
