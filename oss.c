@@ -142,7 +142,7 @@ int main(int argc, char *argv[]){
 
     //Create resource header
     printf("\t");
-    //fprintf(fileLogging, "\t");
+    fprintf(fileLogging, "\t");
     for(i=0;i<10;i++){
         printf("R%i\t", i);
         fprintf(fileLogging, "R%i\t", i);
