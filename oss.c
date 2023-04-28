@@ -262,6 +262,7 @@ int main(int argc, char *argv[]){
             while(i < 18){
                 if(mypidstruct[i].realpid == buf.intData){  //Will this crash if mypidstruct[i].realpid is not set to anything (unitalized)
                     simpidofsender = mypidstruct[i].simpid;
+                    printf("found pid %i in position %i, with simpid %i\n", mypidstruct[i].realpid, i, mypidstruct[i].simpid);
 
                     mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
                     mypidstruct[i].simpid = 0;
@@ -270,8 +271,10 @@ int main(int argc, char *argv[]){
                 i++;
             }
 
+            printf("recources deallocated: ");
             //Update resource table with new values
             for (i=0;i<10;i++){
+                printf(" %i",  resourceTable[simpidofsender][i]);
                 resourcesLeft[i] += resourceTable[simpidofsender][i];
                 resourceTable[simpidofsender][i] = 0;
             }
@@ -371,17 +374,17 @@ int main(int argc, char *argv[]){
                 }
             }
 
-            printf("RescouresLeft:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesLeft[i]);
-            }
-            printf("\n");
+            // printf("RescouresLeft:");
+            // for(i=0;i<10;i++){
+            //     printf(" %i", resourcesLeft[i]);
+            // }
+            // printf("\n");
 
-            printf("Rescouresused:");
-            for(i=0;i<10;i++){
-                printf(" %i", resourcesUsed[i]);
-            }
-            printf("\n");
+            // printf("Rescouresused:");
+            // for(i=0;i<10;i++){
+            //     printf(" %i", resourcesUsed[i]);
+            // }
+            // printf("\n");
             if(!notenoughresources){
                 notenoughresources = false;
                 removeData(); //Delete recourse from front of queue
