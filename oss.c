@@ -466,7 +466,7 @@ int main(int argc, char *argv[]){
                 allResourcesFree = true;
             }
         }
-
+        printf("%d && %d && %d && %d", allResourcesFree, isEmpty(), numofchild>1 , currentTime > 5);
         if(allResourcesFree && isEmpty() && numofchild>1 && currentTime > 5){
             printf("All paraemtersa are met. ENDING____");
             break; //end program
