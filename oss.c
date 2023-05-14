@@ -390,10 +390,10 @@ int main(int argc, char *argv[]){
                 if(deadlock == 1){
                     printf("OSS: Deadlock detected, releasing resources\n");
                     fprintf(fileLogging, "OSS: Deadlock detected, releasing resources\n");
-                    if(prints >= 1){
-                        printf("OSS: There is still a deadlock after releasing resources of one process");
-                        fprintf(fileLogging, "OSS: There is still a deadlock after releasing resources of one process");
-                    }
+                    // if(prints >= 1){
+                    //     printf("OSS: There is still a deadlock after releasing resources of one process\n");
+                    //     fprintf(fileLogging, "OSS: There is still a deadlock after releasing resources of one process\n");
+                    // }
                     prints++;
                     notenoughresources = false;
 
@@ -425,7 +425,7 @@ int main(int argc, char *argv[]){
                 printf("There are now enough resources for %i to come out of the blocked queue\n", toInsert.pid);
                 fprintf(fileLogging, "There are now enough resources for %i to come out of the blocked queue\n", toInsert.pid);
                 removeData(); //Delete process from front of queue
-                prints--;
+                // prints--;
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
                 buf.mtype = toInsert.pid;
