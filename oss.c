@@ -186,9 +186,11 @@ int main(int argc, char *argv[]){
     int checkWhatToDo = -1;
     bool allResourcesFree = false;
     int resourcezzy;
+    int deadlock;
+    int releasedProc;
+    int couldBeLocked;
 
     while(1) {
-
         //stop simulated system clock and get seconds and nanoseconds
         if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) { perror( "clock gettime" ); return EXIT_FAILURE; }
         sec = (stop.tv_sec - start.tv_sec); 
@@ -368,7 +370,7 @@ int main(int argc, char *argv[]){
                     toInsert.resources[i] = resourcesUsed[i];
                 }
                 insert(toInsert);
-            } 
+            }
             notenoughresources = false;
         }
 
@@ -376,6 +378,39 @@ int main(int argc, char *argv[]){
             toInsert = peek();
             for (i=0;i<10;i++){
                 resourcesUsed[i] = toInsert.resources[i];
+            }
+
+            for(i=0;i<10;i++){//are there enough resources?
+                if(resourcesLeft[i] - resourcesUsed[i] < 0){
+                    couldBeLocked = 1;
+                }
+            }
+            if(couldBeLocked == 1){//deadlock detection
+                deadlock++;
+                if(deadlock == 1){
+                    printf("OSS: Deadlock detected, releasing resources");
+                    releasedProc = 0;
+                    notenoughresources = false;
+
+                    for(releasedProc = 0; releasedProc < 18; releasedProc++){
+                        if(resourceTable[releasedProc][0] != 0 || resourceTable[releasedProc][1] != 0 || resourceTable[releasedProc][2] != 0){  //Dealloacte usewd resources
+                                for(i=0;i<10;i++){
+                                resourcesLeft[i] =+ resourceTable[releasedProc][i];
+                                if(resourcesLeft[i] - resourcesUsed[i] < 0){
+                                    notenoughresources = true;
+                                }
+                                resourceTable[releasedProc][i] = 0;
+                            }
+                            printf("These are the resources left - resources used = %i\n", resourcesLeft[i]);
+                        }else{  
+                            //nada
+                        }
+                    }
+                    printf("Releasing process P%i's resourceses\n",  releasedProc);
+                    deadlock--;
+                    releasedProc++;
+                    couldBeLocked == 0;
+                } 
             }
 
             if(!notenoughresources){
