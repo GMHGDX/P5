@@ -189,6 +189,7 @@ int main(int argc, char *argv[]){
     int deadlock;
     int releasedProc;
     int couldBeLocked;
+    bool released;
 
     while(1) {
         //stop simulated system clock and get seconds and nanoseconds
@@ -387,26 +388,29 @@ int main(int argc, char *argv[]){
                 deadlock++;
                 if(deadlock == 1){
                     printf("OSS: Deadlock detected, releasing resources\n");
-                    releasedProc = 0;
                     notenoughresources = false;
 
                     for(releasedProc = 0; releasedProc < 18; releasedProc++){
-                        if(resourceTable[releasedProc][0] != 0 || resourceTable[releasedProc][1] != 0 || resourceTable[releasedProc][2] != 0){  //Dealloacte usewd resources
+                        released = false;
+                        if(!released){
+                            if(resourceTable[releasedProc][0] != 0 || resourceTable[releasedProc][1] != 0 || resourceTable[releasedProc][2] != 0){  //Dealloacte usewd resources
                                 for(i=0;i<10;i++){
-                                resourcesLeft[i] =+ resourceTable[releasedProc][i];
-                                if(resourcesLeft[i] - resourcesUsed[i] < 0){
-                                    notenoughresources = true;
+                                    resourcesLeft[i] =+ resourceTable[releasedProc][i];
+                                    if(resourcesLeft[i] - resourcesUsed[i] < 0){
+                                        notenoughresources = true;
+                                    }
+                                    resourceTable[releasedProc][i] = 0;
                                 }
-                                resourceTable[releasedProc][i] = 0;
+                                printf("OSS: These are the resources left - resources used = %i\n", resourcesLeft[i]);
+                                printf("OSS: Releasing process P%i's resourceses\n",  releasedProc)
+                                released = true;
+                            }else{  
+                                //nada
                             }
-                            printf("OSS: These are the resources left - resources used = %i\n", resourcesLeft[i]);
-                        }else{  
-                            //nada
                         }
                     }
-                    printf("OSS: Releasing process P%i's resourceses\n",  releasedProc);
+                    //printf("OSS: Releasing process P%i's resourceses\n",  releasedProc);
                     deadlock--;
-                    releasedProc++;
                     couldBeLocked == 0;
                 } 
             }
