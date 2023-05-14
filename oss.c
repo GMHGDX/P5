@@ -185,7 +185,6 @@ int main(int argc, char *argv[]){
     bool notenoughresources = false;
     int checkWhatToDo = -1;
     bool allResourcesFree = false;
-    int resourcezzy;
     int deadlock;
     int releasedProc;
     int couldBeLocked;
