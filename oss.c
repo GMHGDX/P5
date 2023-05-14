@@ -256,7 +256,7 @@ int main(int argc, char *argv[]){
                     mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
                     mypidstruct[i].simpid = -1;
 
-                    printf("Resources deallocated: ");
+                    printf("Resources deallocated!!!!: ");
                     fprintf(fileLogging, "Resources deallocated: ");
                     //Update resource table with new values
                     for (i=0;i<10;i++){
