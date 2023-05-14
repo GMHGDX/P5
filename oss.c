@@ -190,7 +190,6 @@ int main(int argc, char *argv[]){
     int releasedProc;
     int couldBeLocked;
     bool released;
-    int prints = 0;
 
     while(1) {
         //stop simulated system clock and get seconds and nanoseconds
@@ -390,13 +389,8 @@ int main(int argc, char *argv[]){
                 if(deadlock == 1){
                     printf("OSS: Deadlock detected, releasing resources\n");
                     fprintf(fileLogging, "OSS: Deadlock detected, releasing resources\n");
-                    // if(prints >= 1){
-                    //     printf("OSS: There is still a deadlock after releasing resources of one process\n");
-                    //     fprintf(fileLogging, "OSS: There is still a deadlock after releasing resources of one process\n");
-                    // }
-                    prints++;
-                    notenoughresources = false;
 
+                    notenoughresources = false;
                     for(releasedProc = 0; releasedProc < 18; releasedProc++){
                         released = false;
                         if(!released){
