@@ -185,6 +185,7 @@ int main(int argc, char *argv[]){
     bool notenoughresources = false;
     int checkWhatToDo = -1;
     bool allResourcesFree = false;
+    int resourcezzy;
 
     while(1) {
 
@@ -256,7 +257,7 @@ int main(int argc, char *argv[]){
                     mypidstruct[i].realpid = 0; //Clear out the position in mypidstruct for reuse
                     mypidstruct[i].simpid = -1;
 
-                    printf("Resources deallocated!!!!: ");
+                    printf("Resources deallocated: ");
                     fprintf(fileLogging, "Resources deallocated: ");
                     //Update resource table with new values
                     for (i=0;i<10;i++){
@@ -314,14 +315,14 @@ int main(int argc, char *argv[]){
                 i++;
             }
 
-            // //Check if we have enough resources for this process
-            // for(i=0;i<10;i++){
-            //     int resourzzy = resourcesLeft[i] - resourcesUsed[i];
-            //     printf("The resources left - resources used = %i", resourzzy);
-            //     if((resourcesLeft[i] - resourcesUsed[i]) < 0){
-            //         notenoughresources = true;
-            //     } 
-            // }
+            //Check if we have enough resources for this process
+            for(i=0;i<10;i++){
+                resourcezzy = resourcesLeft[i] - resourcesUsed[i];
+                printf("These are the resources left - resources used = %i", resourcezzy)
+                if((resourcesLeft[i] - resourcesUsed[i]) < 0){
+                    notenoughresources = true;
+                }
+            }
 
             if(!notenoughresources){
                 //send message back to child that there are enough resources
