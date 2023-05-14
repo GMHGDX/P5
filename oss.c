@@ -190,6 +190,7 @@ int main(int argc, char *argv[]){
     int releasedProc;
     int couldBeLocked;
     bool released;
+    int prints = 0;
 
     while(1) {
         //stop simulated system clock and get seconds and nanoseconds
@@ -387,7 +388,13 @@ int main(int argc, char *argv[]){
             if(couldBeLocked == 1){//deadlock detection
                 deadlock++;
                 if(deadlock == 1){
-                    printf("OSSSSSSSSSSSSSS: Deadlock detected, releasing resources\n");
+                    printf("OSS: Deadlock detected, releasing resources\n");
+                    fprintf(fileLogging, "OSS: Deadlock detected, releasing resources\n");
+                    if(prints >= 1){
+                        printf("OSS: There is still a deadlock after releasing resources of one process");
+                        fprintf(fileLogging, "OSS: There is still a deadlock after releasing resources of one process");
+                    }
+                    prints++;
                     notenoughresources = false;
 
                     for(releasedProc = 0; releasedProc < 18; releasedProc++){
@@ -401,15 +408,14 @@ int main(int argc, char *argv[]){
                                     }
                                     resourceTable[releasedProc][i] = 0;
                                 }
-                                printf("OSS: These are the resources left - resources used = %i\t\n", resourcesLeft[i]);
                                 printf("OSS: Releasing process P%i's resourceses\n",  releasedProc);
+                                fprintf(fileLogging, "OSS: Releasing process P%i's resourceses\n",  releasedProc);
                                 released = true;
                             }else{  
                                 //nada
                             }
                         }
                     }
-                    //printf("OSS: Releasing process P%i's resourceses\n",  releasedProc);
                     deadlock--;
                     couldBeLocked == 0;
                 } 
@@ -419,6 +425,7 @@ int main(int argc, char *argv[]){
                 printf("There are now enough resources for %i to come out of the blocked queue\n", toInsert.pid);
                 fprintf(fileLogging, "There are now enough resources for %i to come out of the blocked queue\n", toInsert.pid);
                 removeData(); //Delete process from front of queue
+                prints--;
                 //send message back to child that there are enough resources
                 strcpy(buf.strData, "1");
                 buf.mtype = toInsert.pid;
