@@ -388,7 +388,7 @@ int main(int argc, char *argv[]){
             if(couldBeLocked == 1){//deadlock detection
                 deadlock++;
                 if(deadlock == 1){
-                    printf("OSS: Deadlock detected, releasing resources");
+                    printf("OSS: Deadlock detected, releasing resources\n");
                     releasedProc = 0;
                     notenoughresources = false;
 
@@ -401,12 +401,12 @@ int main(int argc, char *argv[]){
                                 }
                                 resourceTable[releasedProc][i] = 0;
                             }
-                            printf("These are the resources left - resources used = %i\n", resourcesLeft[i]);
+                            printf("OSS: These are the resources left - resources used = %i\n", resourcesLeft[i]);
                         }else{  
                             //nada
                         }
                     }
-                    printf("Releasing process P%i's resourceses\n",  releasedProc);
+                    printf("OSS: Releasing process P%i's resourceses\n",  releasedProc);
                     deadlock--;
                     releasedProc++;
                     couldBeLocked == 0;
