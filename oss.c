@@ -313,7 +313,7 @@ int main(int argc, char *argv[]){
                 }
                 i++;
             }
-
+            printf("HELLLLPPPPPPPPPPPPPPPPPPPPPPPP");
             //Check if we have enough resources for this process
             for(i=0;i<10;i++){
                 int resourzzy = resourcesLeft[i] - resourcesUsed[i];
