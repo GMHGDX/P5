@@ -387,7 +387,7 @@ int main(int argc, char *argv[]){
             if(couldBeLocked == 1){//deadlock detection
                 deadlock++;
                 if(deadlock == 1){
-                    printf("OSS: Deadlock detected, releasing resources\n");
+                    printf("OSSSSSSSSSSSSSS: Deadlock detected, releasing resources\n");
                     notenoughresources = false;
 
                     for(releasedProc = 0; releasedProc < 18; releasedProc++){
