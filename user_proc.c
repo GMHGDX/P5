@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
     //read time from memory
     double readFromMem;
     readFromMem = *shm_ptr;
-
+                      
     //message queue
     if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){ perror("IPC error: ftok"); exit(1); } //get message queue key used in oss
     if ((msqid = msgget(msqkey, PERMS)) == -1) { perror("msgget in child"); exit(1); } //access oss message queue

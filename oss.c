@@ -316,9 +316,11 @@ int main(int argc, char *argv[]){
 
             //Check if we have enough resources for this process
             for(i=0;i<10;i++){
+                int resourzzy = resourcesLeft[i] - resourcesUsed[i];
                 if((resourcesLeft[i] - resourcesUsed[i]) < 0){
                     notenoughresources = true;
                 }
+                printf("The resources left - resources used = %i", resourzzy);
             }
 
             if(!notenoughresources){
