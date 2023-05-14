@@ -401,7 +401,7 @@ int main(int argc, char *argv[]){
                                     }
                                     resourceTable[releasedProc][i] = 0;
                                 }
-                                printf("OSS: These are the resources left - resources used = %i\n", resourcesLeft[i]);
+                                printf("OSS: These are the resources left - resources used = %i\t\n", resourcesLeft[i]);
                                 printf("OSS: Releasing process P%i's resourceses\n",  releasedProc);
                                 released = true;
                             }else{  
