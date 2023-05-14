@@ -315,11 +315,10 @@ int main(int argc, char *argv[]){
                 i++;
             }
 
-            notenoughresources = false;
             //Check if we have enough resources for this process
             for(i=0;i<10;i++){
                 resourcezzy = resourcesLeft[i] - resourcesUsed[i];
-                printf("These are the resources left - resources used = %i\n", resourcezzy);
+                printf("These are the resources left - resources used = %i", resourcezzy)
                 if((resourcesLeft[i] - resourcesUsed[i]) < 0){
                     notenoughresources = true;
                 }
@@ -370,22 +369,13 @@ int main(int argc, char *argv[]){
                 }
                 insert(toInsert);
             } 
+            notenoughresources = false;
         }
 
         if(!isEmpty()){ //Is blocked queue empty?
             toInsert = peek();
             for (i=0;i<10;i++){
                 resourcesUsed[i] = toInsert.resources[i];
-            }
-
-            notenoughresources = false;
-            //Check if we have enough resources for this process
-            for(i=0;i<10;i++){
-                resourcezzy = resourcesLeft[i] - resourcesUsed[i];
-                //printf("These are the resources left - resources used = %i\n", resourcezzy);
-                if((resourcesLeft[i] - resourcesUsed[i]) < 0){
-                    notenoughresources = true;
-                }
             }
 
             if(!notenoughresources){
