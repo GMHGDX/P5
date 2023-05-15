@@ -1,4 +1,6 @@
-:Last time I did not implement deadlock detection and recovery. Now it can: 
+- Project 5 - 
+
+Last time I did not implement deadlock detection and recovery. Now it can: 
 - properly detect a deadlock 
 - release the resource of a process as a part of deadlock recovery
 
